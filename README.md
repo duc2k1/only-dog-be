@@ -1,13 +1,17 @@
 ## Install
 
-```bat
+```
  composer install
- php artisan migrate
+```
+
+## Update
+
+```
+ composer update
 ```
 
 ## Run
 
-```bat
- cd server
+```
  php artisan serve
 ```
