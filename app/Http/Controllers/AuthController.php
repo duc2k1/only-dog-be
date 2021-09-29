@@ -75,7 +75,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function ChangePassword(Request $request) {
+    public function changePassword(Request $request) {
         $userId = auth()->user()->id;
         $validator = Validator::make($request->all(), [
             'old_password' => 'required|string|min:6',
@@ -90,7 +90,7 @@ class AuthController extends Controller
                     ['password' => bcrypt($request->password)]));
 
         return response()->json([
-            'message' => 'User successfully registered',
+            'message' => 'User successfully changepassword',
             'user' => $user
         ], 201);
     }
