@@ -1,6 +1,12 @@
 
 ## auth -api
 
+
+    -setup database file .env
+    run php artisan migrate 
+    
+    
+    
     'middleware' => 'api',
     'prefix' => 'auth'
 
