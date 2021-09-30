@@ -7,6 +7,6 @@
     <title>Social media</title>
 </head>
 <body>
-    <h1>HELLO WORLD</h1>
+    <h1>HELLO WORLD 2</h1>
 </body>
 </html>
