@@ -1,17 +1,11 @@
-## Install
+## Install/Update
 
 ```
- composer install
-```
-
-## Update
-
-```
- composer update
+ yarn
 ```
 
 ## Run
 
 ```
- php artisan serve
+ yarn start
 ```

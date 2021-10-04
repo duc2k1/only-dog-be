@@ -1,0 +1,25 @@
+{
+	"name": "social-media-be",
+	"version": "1.0.0",
+	"description": "Project for learning",
+	"main": "index.js",
+	"scripts": {
+		"start": "nodemon index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/duc622/social-media-be.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/duc622/social-media-be/issues"
+	},
+	"homepage": "https://github.com/duc622/social-media-be#readme",
+	"dependencies": {
+		"express": "^4.17.1"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.13"
+	}
+}
