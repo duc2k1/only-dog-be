@@ -2,7 +2,8 @@ POST http://localhost:5500/api/auth/register
 Content-Type: application/json
 
 {
-  "username": "dd",
+  "name": "dde",
+  "email":"ducc@mail.com",
   "password": "dd"
 }
 
@@ -12,7 +13,7 @@ POST http://localhost:5500/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "dd",
+  "name": "dd",
   "password": "dd"
 }
 
@@ -20,7 +21,7 @@ Content-Type: application/json
 
 POST http://localhost:5500/api/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTZmZDI1YmY2ZDM5MmRhM2JmMjdkOGMiLCJpYXQiOjE2MzQ3MTgzMjF9.jw3g8gJ29tpmvXZxSiMHZQB6BhcM7TFmHbcWcjv5bp0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTcwMzliZjI2ZWRjOTMyYTFiMWUwMDkiLCJpYXQiOjE2MzQ3NDQ4MjF9.9yAQvnER0Etev0_r1zgBWCEno-JhEYuOScIBYPYuvuc
 
 {
   "title": "Reactdddd",
@@ -32,13 +33,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTZmZ
 ###
 
 GET http://localhost:5500/api/posts
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTZmZDI1YmY2ZDM5MmRhM2JmMjdkOGMiLCJpYXQiOjE2MzQ3MTgzMjF9.jw3g8gJ29tpmvXZxSiMHZQB6BhcM7TFmHbcWcjv5bp0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTcwMzliZjI2ZWRjOTMyYTFiMWUwMDkiLCJpYXQiOjE2MzQ3NDQ4MjF9.9yAQvnER0Etev0_r1zgBWCEno-JhEYuOScIBYPYuvuc
 
 ###
 
-PUT http://localhost:5500/api/posts/616fd27af6d392da3bf27d8f
+PUT http://localhost:5500/api/posts/61703a2c159784aeebdc3b66
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTZmZDI1YmY2ZDM5MmRhM2JmMjdkOGMiLCJpYXQiOjE2MzQ3MTgzMjF9.jw3g8gJ29tpmvXZxSiMHZQB6BhcM7TFmHbcWcjv5bp0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTcwMzliZjI2ZWRjOTMyYTFiMWUwMDkiLCJpYXQiOjE2MzQ3NDQ4MjF9.9yAQvnER0Etev0_r1zgBWCEno-JhEYuOScIBYPYuvuc
 
 {
   "title": "Vue",
@@ -49,5 +50,5 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTZmZ
 
 ###
 
-DELETE http://localhost:5500/api/posts/616fd27af6d392da3bf27d8f
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTZmZDI1YmY2ZDM5MmRhM2JmMjdkOGMiLCJpYXQiOjE2MzQ3MTgzMjF9.jw3g8gJ29tpmvXZxSiMHZQB6BhcM7TFmHbcWcjv5bp0
+DELETE http://localhost:5500/api/posts/61703a2c159784aeebdc3b66
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTcwMzliZjI2ZWRjOTMyYTFiMWUwMDkiLCJpYXQiOjE2MzQ3NDQ4MjF9.9yAQvnER0Etev0_r1zgBWCEno-JhEYuOScIBYPYuvuc

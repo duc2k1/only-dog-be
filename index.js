@@ -1,9 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
-import Express from "express";
+import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-
 import authRouter from "./routes/auth.js";
 import postRouter from "./routes/post.js";
 
@@ -23,8 +22,8 @@ const connectDB = async () => {
 
 connectDB();
 
-const app = Express();
-app.use(Express.json());
+const app = express();
+app.use(express.json());
 app.use(cors());
 
 app.use("/api/auth", authRouter);

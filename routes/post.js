@@ -4,13 +4,10 @@ import verifyToken from "../middleware/auth.js";
 
 import Post from "../models/Post.js";
 
-// @route GET api/posts
-// @desc Get posts
-// @access Private
 router.get("/", verifyToken, async (req, res) => {
   try {
     const posts = await Post.find({ user: req.userId }).populate("user", [
-      "username",
+      "name",
     ]);
     res.json({ success: true, posts });
   } catch (error) {
@@ -19,9 +16,6 @@ router.get("/", verifyToken, async (req, res) => {
   }
 });
 
-// @route POST api/posts
-// @desc Create post
-// @access Private
 router.post("/", verifyToken, async (req, res) => {
   const { title, description, url, status } = req.body;
 
@@ -49,9 +43,6 @@ router.post("/", verifyToken, async (req, res) => {
   }
 });
 
-// @route PUT api/posts
-// @desc Update post
-// @access Private
 router.put("/:id", verifyToken, async (req, res) => {
   const { title, description, url, status } = req.body;
 
@@ -95,9 +86,6 @@ router.put("/:id", verifyToken, async (req, res) => {
   }
 });
 
-// @route DELETE api/posts
-// @desc Delete post
-// @access Private
 router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const postDeleteCondition = { _id: req.params.id, user: req.userId };

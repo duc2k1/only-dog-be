@@ -1,4 +1,4 @@
-import Jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 const verifyToken = (req, res, next) => {
   const authHeader = req.header("Authorization");
@@ -10,7 +10,7 @@ const verifyToken = (req, res, next) => {
       .json({ success: false, message: "Access token not found" });
 
   try {
-    const decoded = Jwt.verify(token, "duc");
+    const decoded = jwt.verify(token, "duc");
 
     req.userId = decoded.userId;
     next();

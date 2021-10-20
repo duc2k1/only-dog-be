@@ -2,14 +2,12 @@ import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 import argon2 from "argon2";
-import Jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 const router = express.Router();
 import verifyToken from "../middleware/auth.js";
 import User from "../models/User.js";
 
-// @route GET api/auth
-// @desc Check if user is logged in
-// @access Public
 router.get("/", verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.userId).select("-password");
@@ -24,34 +22,29 @@ router.get("/", verifyToken, async (req, res) => {
   }
 });
 
-// @route POST api/auth/register
-// @desc Register user
-// @access Public
 router.post("/register", async (req, res) => {
-  const { username, password } = req.body;
+  const { name, email, password } = req.body;
 
   // Simple validation
-  if (!username || !password)
+  if (!name || !email || !password)
     return res
       .status(400)
-      .json({ success: false, message: "Missing username and/or password" });
+      .json({ success: false, message: "Missing name and/or password" });
 
   try {
-    // Check for existing user
-    const user = await User.findOne({ username });
-
-    if (user)
+    // Check for existing user or email
+    const userOrEmail = await User.findOne({ $or: [{ name }, { email }] });
+    if (userOrEmail)
       return res
         .status(400)
-        .json({ success: false, message: "Username already taken" });
-
+        .json({ success: false, message: "name or email already taken" });
     // All good
     const hashedPassword = await argon2.hash(password);
-    const newUser = new User({ username, password: hashedPassword });
+    const newUser = new User({ name, email, password: hashedPassword });
     await newUser.save();
 
     // Return token
-    const accessToken = Jwt.sign({ userId: newUser._id }, "duc");
+    const accessToken = jwt.sign({ userId: newUser._id }, "duc");
 
     res.json({
       success: true,
@@ -64,36 +57,34 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// @route POST api/auth/login
-// @desc Login user
-// @access Public
 router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+  const { name, password } = req.body;
 
   // Simple validation
-  if (!username || !password)
-    return res
-      .status(400)
-      .json({ success: false, message: "Missing username and/or password" });
+  if (!name || !password)
+    return res.status(400).json({
+      success: false,
+      message: "Missing name and/or password",
+    });
 
   try {
     // Check for existing user
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ name });
     if (!user)
       return res
         .status(400)
-        .json({ success: false, message: "Incorrect username or password" });
+        .json({ success: false, message: "Incorrect name or password" });
 
-    // Username found
+    // name found, verify password
     const passwordValid = await argon2.verify(user.password, password);
     if (!passwordValid)
       return res
         .status(400)
-        .json({ success: false, message: "Incorrect username or password" });
+        .json({ success: false, message: "Incorrect name or password" });
 
     // All good
     // Return token
-    const accessToken = Jwt.sign({ userId: user._id }, "duc");
+    const accessToken = jwt.sign({ userId: user._id }, "duc");
 
     res.json({
       success: true,
