@@ -1,0 +1,53 @@
+POST http://localhost:5500/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "dd",
+  "password": "dd"
+}
+
+###
+
+POST http://localhost:5500/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "dd",
+  "password": "dd"
+}
+
+###
+
+POST http://localhost:5500/api/posts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTZmZDI1YmY2ZDM5MmRhM2JmMjdkOGMiLCJpYXQiOjE2MzQ3MTgzMjF9.jw3g8gJ29tpmvXZxSiMHZQB6BhcM7TFmHbcWcjv5bp0
+
+{
+  "title": "Reactdddd",
+  "description": "React",
+  "url": "react.com",
+  "status": "TO LEARN"
+}
+
+###
+
+GET http://localhost:5500/api/posts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTZmZDI1YmY2ZDM5MmRhM2JmMjdkOGMiLCJpYXQiOjE2MzQ3MTgzMjF9.jw3g8gJ29tpmvXZxSiMHZQB6BhcM7TFmHbcWcjv5bp0
+
+###
+
+PUT http://localhost:5500/api/posts/616fd27af6d392da3bf27d8f
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTZmZDI1YmY2ZDM5MmRhM2JmMjdkOGMiLCJpYXQiOjE2MzQ3MTgzMjF9.jw3g8gJ29tpmvXZxSiMHZQB6BhcM7TFmHbcWcjv5bp0
+
+{
+  "title": "Vue",
+  "description": "VUEEEEE",
+  "url": "https://vuejs.org",
+  "status": "LEARNING"
+}
+
+###
+
+DELETE http://localhost:5500/api/posts/616fd27af6d392da3bf27d8f
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTZmZDI1YmY2ZDM5MmRhM2JmMjdkOGMiLCJpYXQiOjE2MzQ3MTgzMjF9.jw3g8gJ29tpmvXZxSiMHZQB6BhcM7TFmHbcWcjv5bp0

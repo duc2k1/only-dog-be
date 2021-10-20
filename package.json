@@ -1,25 +1,24 @@
 {
   "name": "only-dog-be",
   "version": "1.0.0",
-  "main": "app.js",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node index",
+    "server": "nodemon index"
   },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "@teachablemachine/image": "^0.8.5",
-    "@tensorflow/tfjs": "^3.9.0",
-    "@tensorflow/tfjs-node": "^3.9.0",
-    "body-parser": "^1.19.0",
-    "canvas": "^2.8.0",
+    "argon2": "^0.28.2",
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "firebase-admin": "^10.0.0",
-    "form-data": "^4.0.0",
-    "jsdom": "^18.0.0",
-    "node-fetch": "^2.6.0",
-    "uuid": "^8.3.2"
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.11"
   },
   "devDependencies": {
-    "nodemon": "^2.0.13"
+    "nodemon": "^2.0.14"
   }
 }
