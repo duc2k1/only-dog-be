@@ -2,26 +2,24 @@ POST http://localhost:5500/api/auth/register
 Content-Type: application/json
 
 {
-  "name": "dde",
-  "email":"ducc@mail.com",
+  "name": "duc7",
+  "email":"duc7@mail.com",
   "password": "dd"
 }
 
 ###
-
 POST http://localhost:5500/api/auth/login
 Content-Type: application/json
 
 {
-  "name": "dd",
+  "name": "duc7",
   "password": "dd"
 }
 
 ###
-
 POST http://localhost:5500/api/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTcwMzliZjI2ZWRjOTMyYTFiMWUwMDkiLCJpYXQiOjE2MzQ3NDQ4MjF9.9yAQvnER0Etev0_r1zgBWCEno-JhEYuOScIBYPYuvuc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTcwNDBlYWZjM2FiYTZlOTBmZGFjNDciLCJpYXQiOjE2MzQ3NDY2MjJ9.md4jpdBk6PcoDXojl9ksZOW11gemmoXmdPE17Fku9Ns
 
 {
   "title": "Reactdddd",
@@ -31,12 +29,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTcwM
 }
 
 ###
-
 GET http://localhost:5500/api/posts
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTcwMzliZjI2ZWRjOTMyYTFiMWUwMDkiLCJpYXQiOjE2MzQ3NDQ4MjF9.9yAQvnER0Etev0_r1zgBWCEno-JhEYuOScIBYPYuvuc
 
 ###
-
 PUT http://localhost:5500/api/posts/61703a2c159784aeebdc3b66
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTcwMzliZjI2ZWRjOTMyYTFiMWUwMDkiLCJpYXQiOjE2MzQ3NDQ4MjF9.9yAQvnER0Etev0_r1zgBWCEno-JhEYuOScIBYPYuvuc
@@ -49,6 +45,5 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTcwM
 }
 
 ###
-
 DELETE http://localhost:5500/api/posts/61703a2c159784aeebdc3b66
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTcwMzliZjI2ZWRjOTMyYTFiMWUwMDkiLCJpYXQiOjE2MzQ3NDQ4MjF9.9yAQvnER0Etev0_r1zgBWCEno-JhEYuOScIBYPYuvuc

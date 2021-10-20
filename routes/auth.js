@@ -1,12 +1,10 @@
-import dotenv from "dotenv";
-dotenv.config();
 import express from "express";
-import argon2 from "argon2";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 const router = express.Router();
 import verifyToken from "../middleware/auth.js";
 import User from "../models/User.js";
+const saltRounds = 10;
 
 router.get("/", verifyToken, async (req, res) => {
   try {
@@ -39,7 +37,7 @@ router.post("/register", async (req, res) => {
         .status(400)
         .json({ success: false, message: "name or email already taken" });
     // All good
-    const hashedPassword = await argon2.hash(password);
+    const hashedPassword = bcrypt.hashSync(password, saltRounds);
     const newUser = new User({ name, email, password: hashedPassword });
     await newUser.save();
 
@@ -75,8 +73,10 @@ router.post("/login", async (req, res) => {
         .status(400)
         .json({ success: false, message: "Incorrect name or password" });
 
-    // name found, verify password
-    const passwordValid = await argon2.verify(user.password, password);
+    // name found -> verify password
+    //user.password get from db, password get from req
+    const passwordValid = bcrypt.compareSync(password, user.password); // true
+
     if (!passwordValid)
       return res
         .status(400)
