@@ -3,9 +3,20 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import verifyToken from "../middleware/auth.js";
 import User from "../models/User.js";
+import dotenv from "dotenv";
 //--------------------------------------------------------------
 const saltRounds = 10;
 const router = express.Router();
+dotenv.config();
+//--------------------------------------------------------------
+let refreshTokensTemp = [];
+
+const refreshToken = jwt.sign(data, process.env.REFRESH_TOKEN_SECRET);
+refreshTokensTemp.push(refreshToken);
+  res.json({ accessToken, refreshToken });
+router.post('/refreshToken',(req,res)=>{
+
+});
 //--------------------------------------------------------------
 router.get("/", verifyToken, async (req, res) => {
   try {
@@ -75,8 +86,8 @@ router.post("/login", async (req, res) => {
         .status(400)
         .json({ success: false, message: "Incorrect email or password" });
     // All good
-    // Return token
-    const accessToken = jwt.sign({ userId: user._id }, "duc");
+    // Return token, set expires on 60 seccond 
+    const accessToken = jwt.sign({ userId: user._id },process.env.ACCESS_TOKEN_SECRET,{expiresIn: '60s'});
     res.json({
       success: true,
       message: "User logged in successfully",
@@ -88,4 +99,9 @@ router.post("/login", async (req, res) => {
   }
 });
 //--------------------------------------------------------------
+router.post("/logout",async(req,res)=>{
+
+});
+
+
 export default router;
