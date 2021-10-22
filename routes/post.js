@@ -1,8 +1,19 @@
 import express from "express";
-const router = express.Router();
+import multer from "multer";
 import verifyToken from "../middleware/auth.js";
 import Post from "../models/Post.js";
-
+//--------------------------------------------------------------
+const router = express.Router();
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "images");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+const upload = multer({ storage: storage });
+//--------------------------------------------------------------
 router.get("/", verifyToken, async (req, res) => {
   try {
     const posts = await Post.find({ user: req.userId }).populate("user", [
@@ -14,20 +25,35 @@ router.get("/", verifyToken, async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
-
+//--------------------------------------------------------------
+router.post(
+  "/upload",
+  verifyToken,
+  upload.single("avatar"),
+  async (req, res, next) => {
+    const file = req.file;
+    if (!file) {
+      const error = new Error("Please upload a file");
+      error.httpStatusCode = 400;
+      return next(error);
+    }
+    res.send(file);
+  }
+);
+//--------------------------------------------------------------
 router.post("/", verifyToken, async (req, res) => {
-  const { title, description, url, status } = req.body;
+  const { userId, numberOfLike, numberOfDislike } = req.body;
   if (!title)
     return res
       .status(400)
       .json({ success: false, message: "Title is required" });
   try {
+    const pathImage = ""; /////save
     const newPost = new Post({
-      title,
-      description,
-      url: url.startsWith("https://") ? url : `https://${url}`,
-      status: status || "TO LEARN",
-      user: req.userId,
+      userId,
+      pathImage,
+      numberOfLike,
+      numberOfDislike,
     });
     await newPost.save();
     res.json({ success: true, message: "Happy learning!", post: newPost });
@@ -36,7 +62,7 @@ router.post("/", verifyToken, async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
-
+//--------------------------------------------------------------
 router.put("/:id", verifyToken, async (req, res) => {
   const { title, description, url, status } = req.body;
   // validation
@@ -73,7 +99,7 @@ router.put("/:id", verifyToken, async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
-
+//--------------------------------------------------------------
 router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const postDeleteCondition = { _id: req.params.id, user: req.userId };
@@ -90,5 +116,5 @@ router.delete("/:id", verifyToken, async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
-
+//--------------------------------------------------------------
 export default router;

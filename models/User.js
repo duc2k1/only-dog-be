@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
-
+//--------------------------------------------------------------
 const UserSchema = new Schema({
   name: {
     type: String,
@@ -16,10 +16,13 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  pathAvatar: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
-
+//--------------------------------------------------------------
 export default mongoose.model("users", UserSchema);

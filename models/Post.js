@@ -1,25 +1,27 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
-
+//--------------------------------------------------------------
 const PostSchema = new Schema({
-  title: {
+  userId: {
     type: String,
     required: true,
   },
-  description: {
+  pathImage: {
     type: String,
+    required: true,
   },
-  url: {
-    type: String,
+  numberOfLike: {
+    type: Number,
+    required: true,
   },
-  status: {
-    type: String,
-    enum: ["TO LEARN", "LEARNING", "LEARNED"],
+  numberOfDislike: {
+    type: Number,
+    required: true,
   },
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: "users",
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 });
-
+//--------------------------------------------------------------
 export default mongoose.model("posts", PostSchema);
