@@ -23,8 +23,13 @@ const UserSchema = new Schema({
   },
   pathAvatar: {
     type: String,
+    default:""
   },
   followers:{
+    type:Array,
+    default:[],
+  },
+  followings:{
     type:Array,
     default:[],
   },

@@ -10,6 +10,10 @@ const PostSchema = new Schema({
     type: String,
     required: true,
   },
+  desc:{
+    type:String,
+    max:500,
+  },
   numberOfLike: {
     type: Number,
     required: true,

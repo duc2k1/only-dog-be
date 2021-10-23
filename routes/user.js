@@ -1,4 +1,5 @@
 import express from "express";
+import { get } from "lodash";
 const router = express.Router();
 import verifyToken from "../middleware/auth.js";
 import User from "../models/User.js";
@@ -13,7 +14,7 @@ router.get("/", verifyToken, async (req, res) => {
   }
 });
 //--------------------------------------------------------------
-router::
+
 
 //--------------------------------------------------------------
 
