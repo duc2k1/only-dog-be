@@ -13,7 +13,7 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     unique: true,
-    max50,
+    max:50,
     min:3,
   },
   password: {
@@ -32,6 +32,10 @@ const UserSchema = new Schema({
   followings:{
     type:Array,
     default:[],
+  },
+  posts:{
+    type:Array,
+    default:[]
   },
   createdAt: {
     type: Date,

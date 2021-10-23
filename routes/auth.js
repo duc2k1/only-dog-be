@@ -9,14 +9,14 @@ const saltRounds = 10;
 const router = express.Router();
 dotenv.config();
 //--------------------------------------------------------------
-let refreshTokensTemp = [];
+// let refreshTokensTemp = [];
 
-const refreshToken = jwt.sign(data, process.env.REFRESH_TOKEN_SECRET);
-refreshTokensTemp.push(refreshToken);
-  res.json({ accessToken, refreshToken });
-router.post('/refreshToken',(req,res)=>{
+// const refreshToken = jwt.sign(data, process.env.REFRESH_TOKEN_SECRET);
+// refreshTokensTemp.push(refreshToken);
+//   res.json({ accessToken, refreshToken });
+// router.post('/refreshToken',(req,res)=>{
 
-});
+// });
 //--------------------------------------------------------------
 router.get("/", verifyToken, async (req, res) => {
   try {
@@ -51,7 +51,7 @@ router.post("/register", async (req, res) => {
     const newUser = new User({ name, email, password: hashedPassword });
     await newUser.save();
     // Return token
-    const accessToken = jwt.sign({ userId: newUser._id }, "duc");
+    const accessToken = jwt.sign({ userId: newUser._id },process.env.ACCESS_TOKEN_SECRET);
     res.json({
       success: true,
       message: "User created successfully",
@@ -87,7 +87,8 @@ router.post("/login", async (req, res) => {
         .json({ success: false, message: "Incorrect email or password" });
     // All good
     // Return token, set expires on 60 seccond 
-    const accessToken = jwt.sign({ userId: user._id },process.env.ACCESS_TOKEN_SECRET,{expiresIn: '60s'});
+    // const accessToken = jwt.sign({ userId: user._id },process.env.ACCESS_TOKEN_SECRET,{expiresIn: '60s'});
+    const accessToken = jwt.sign({ userId: user._id },process.env.ACCESS_TOKEN_SECRET);
     res.json({
       success: true,
       message: "User logged in successfully",
