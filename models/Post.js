@@ -8,15 +8,15 @@ const PostSchema = new Schema({
   },
   pathImage: {
     type: String,
-    required: true,
+    default: "images/dog.jpg",
   },
-  numberOfLike: {
-    type: Number,
-    required: true,
+  likes: {
+    type: Array,
+    default: [],
   },
-  numberOfDislike: {
-    type: Number,
-    required: true,
+  dislikes: {
+    type: Array,
+    default: [],
   },
   createdAt: {
     type: Date,

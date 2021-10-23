@@ -18,6 +18,19 @@ const UserSchema = new Schema({
   },
   pathAvatar: {
     type: String,
+    default: "images/dog.jpg",
+  },
+  posts: {
+    type: Array,
+    default: [],
+  },
+  followers: {
+    type: Array,
+    default: [],
+  },
+  following: {
+    type: Array,
+    default: [],
   },
   createdAt: {
     type: Date,
