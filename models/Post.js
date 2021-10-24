@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+//--------------------------------------------------------------
 const Schema = mongoose.Schema;
 //--------------------------------------------------------------
 const PostSchema = new Schema({
@@ -8,19 +9,15 @@ const PostSchema = new Schema({
   },
   pathImage: {
     type: String,
-    required: true,
+    default:"https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
   },
-  desc:{
-    type:String,
-    max:500,
+  likes: {
+    type: Array,
+    default:[],
   },
-  numberOfLike: {
-    type: Number,
-    required: true,
-  },
-  numberOfDislike: {
-    type: Number,
-    required: true,
+  dislikes: {
+    type: Array,
+    default:[],
   },
   createdAt: {
     type: Date,

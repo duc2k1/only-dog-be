@@ -2,12 +2,11 @@
   "name": "only-dog-be",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "type": "module",
   "scripts": {
-    
-    "start": "node index",
-    "server": "nodemon index"
+    "start": "node app",
+    "server": "nodemon app"
   },
   "author": "",
   "license": "ISC",

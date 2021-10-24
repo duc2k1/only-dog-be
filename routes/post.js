@@ -117,4 +117,7 @@ router.delete("/:id", verifyToken, async (req, res) => {
   }
 });
 //--------------------------------------------------------------
+// route.post("/add-post", verifyToken, async (req, res) => {
+  
+// });
 export default router;

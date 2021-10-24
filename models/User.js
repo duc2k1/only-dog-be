@@ -1,47 +1,56 @@
 import mongoose from "mongoose";
+//--------------------------------------------------------------
 const Schema = mongoose.Schema;
+const validateEmail = function (email) {
+  var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return re.test(email);
+};
 //--------------------------------------------------------------
 const UserSchema = new Schema({
-  name: {
+  userName: {
     type: String,
     required: true,
     unique: true,
-    min:3,
-    max:25,
+    validate: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+    min: 3,
+    max: 25,
   },
   email: {
     type: String,
     required: true,
     unique: true,
-    max:50,
-    min:3,
+    validate: [validateEmail, "Please fill a valid email address"],
+    match: [
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+      "Please fill a valid email address",
+    ],
+    max: 50,
+    min: 3,
   },
   password: {
     type: String,
     required: true,
-    min:6
   },
   pathAvatar: {
     type: String,
-    default:""
+    default: "",
   },
-  followers:{
-    type:Array,
-    default:[],
+  followers: {
+    type: Array,
+    default: [],
   },
-  followings:{
-    type:Array,
-    default:[],
+  followings: {
+    type: Array,
+    default: [],
   },
-  posts:{
-    type:Array,
-    default:[]
+  posts: {
+    type: Array,
+    default: [],
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
-  
 });
 //--------------------------------------------------------------
 export default mongoose.model("users", UserSchema);

@@ -9,15 +9,6 @@ const saltRounds = 10;
 const router = express.Router();
 dotenv.config();
 //--------------------------------------------------------------
-// let refreshTokensTemp = [];
-
-// const refreshToken = jwt.sign(data, process.env.REFRESH_TOKEN_SECRET);
-// refreshTokensTemp.push(refreshToken);
-//   res.json({ accessToken, refreshToken });
-// router.post('/refreshToken',(req,res)=>{
-
-// });
-//--------------------------------------------------------------
 router.get("/", verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.userId).select("-password");

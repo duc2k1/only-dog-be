@@ -6,7 +6,6 @@ import postRouter from "./routes/post.js";
 import userRouter from "./routes/user.js";
 import helmet from "helmet";
 import dotenv from "dotenv";
-
 //--------------------------------------------------------------
 const app = express();
 const PORT = process.env.PORT || 5500;
