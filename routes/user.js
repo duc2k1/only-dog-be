@@ -18,21 +18,20 @@ router.get("/", verifyToken, async (req, res) => {
 router.get("/user-suggestions", verifyToken, async (req, res) => {
   const usersSortByFollower = await User.aggregate([
     {
-      $addFields:{
-        countFollower:{
-          $size: "$followers"
-        }
-      }
+      $addFields: {
+        countFollower: {
+          $size: "$followers",
+        },
+      },
     },
     {
-      $sort:{
-        countFollower:-1
-      }
-    }
+      $sort: {
+        countFollower: -1,
+      },
+    },
   ]);
-
-  //suggestion user followers descending 
-  const users = await User.find({}).sort({"countFollower":1}).select('-password');
+  //suggestion user
+  const users = await User.find({}).select("-password");
   res.json({ success: true, users });
 });
 
