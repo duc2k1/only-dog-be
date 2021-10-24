@@ -5,13 +5,16 @@ import authRouter from "./routes/auth.js";
 import postRouter from "./routes/post.js";
 import userRouter from "./routes/user.js";
 import helmet from "helmet";
+import dotenv from "dotenv";
+
 //--------------------------------------------------------------
 const app = express();
 const PORT = process.env.PORT || 5500;
+dotenv.config();
 //--------------------------------------------------------------
 const connectDB = async () => {
   try {
-    await mongoose.connect(`mongodb://localhost:27017/myapp`, {
+    await mongoose.connect(process.env.DB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
