@@ -1,37 +1,45 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import verifyToken from "../middleware/auth.js";
 import User from "../models/User.js";
 import dotenv from "dotenv";
+import validateUserName from "../validate/validateUserName.js";
+import validateEmail from "../validate/validateEmail.js";
+import validatePassword from "../validate/validatePassword.js";
 //--------------------------------------------------------------
 const saltRounds = 10;
 const router = express.Router();
 dotenv.config();
 //--------------------------------------------------------------
 router.post("/register", async (req, res) => {
-  const { name, email, password } = req.body;
+  const { userName, email, password } = req.body;
   // Simple validation
-  if (!name || !email || !password)
+  if (
+    !validateUserName(userName) ||
+    !validateEmail(email) ||
+    !validatePassword(password)
+  )
     return res
       .status(400)
-      .json({ success: false, message: "Missing name and/or password" });
+      .json({ success: false, message: "Error with userName and/or password" });
   try {
     // Check for existing user or email
-    const userOrEmail = await User.findOne({ $or: [{ name }, { email }] });
+    const userOrEmail = await User.findOne({ $or: [{ userName }, { email }] });
     if (userOrEmail)
       return res
         .status(400)
-        .json({ success: false, message: "name or email already taken" });
+        .json({ success: false, message: "userName or email already taken" });
     // All good
     const hashedPassword = bcrypt.hashSync(password, saltRounds);
-    const newUser = new User({ name, email, password: hashedPassword });
+    const newUser = new User({ userName, email, password: hashedPassword });
     await newUser.save();
     // Return token
-    const accessToken = jwt.sign({ userId: newUser._id },process.env.ACCESS_TOKEN_SECRET);
+    const accessToken = jwt.sign(
+      { userId: newUser._id },
+      process.env.ACCESS_TOKEN_SECRET
+    );
     res.json({
       success: true,
-      message: "User created successfully",
       accessToken,
     });
   } catch (error) {
@@ -43,32 +51,32 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   // Simple validation
-  if (!email || !password)
+  if (!validateEmail(email) || !validatePassword(password))
     return res.status(400).json({
       success: false,
-      message: "Missing email and/or password",
+      message: "Error with email and/or password",
     });
   try {
     // Check for existing user
     const user = await User.findOne({ email });
     if (!user)
-      return res
-        .status(400)
-        .json({ success: false, message: "Incorrect email or password" });
+      return res.status(400).json({ success: false, message: "Not found" });
     // email found -> verify password
     //user.password get from db, password get from req
     const passwordValid = bcrypt.compareSync(password, user.password); // true
     if (!passwordValid)
       return res
         .status(400)
-        .json({ success: false, message: "Incorrect email or password" });
+        .json({ success: false, message: "Incorrect password" });
     // All good
-    // Return token, set expires on 60 seccond 
+    // Return token, set expires on 60 seccond
     // const accessToken = jwt.sign({ userId: user._id },process.env.ACCESS_TOKEN_SECRET,{expiresIn: '60s'});
-    const accessToken = jwt.sign({ userId: user._id },process.env.ACCESS_TOKEN_SECRET);
+    const accessToken = jwt.sign(
+      { userId: user._id },
+      process.env.ACCESS_TOKEN_SECRET
+    );
     res.json({
       success: true,
-      message: "User logged in successfully",
       accessToken,
     });
   } catch (error) {

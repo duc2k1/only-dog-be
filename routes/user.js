@@ -2,7 +2,6 @@ import express from "express";
 const router = express.Router();
 import verifyToken from "../middleware/auth.js";
 import User from "../models/User.js";
-import db from "mongoose";
 //--------------------------------------------------------------
 router.get("/", verifyToken, async (req, res) => {
   try {
@@ -15,7 +14,7 @@ router.get("/", verifyToken, async (req, res) => {
 });
 //--------------------------------------------------------------
 //User Suggestions
-router.get("/user-suggestions", verifyToken, async (req, res) => {
+router.get("/suggestions", verifyToken, async (req, res) => {
   const usersSortByFollower = await User.aggregate([
     {
       $addFields: {
