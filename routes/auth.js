@@ -77,6 +77,7 @@ router.post("/login", async (req, res) => {
     // All good
     // Return token
     const accessToken = jwt.sign({ userId: user._id }, "duc");
+
     res.json({
       success: true,
       message: "User logged in successfully",
@@ -88,4 +89,12 @@ router.post("/login", async (req, res) => {
   }
 });
 //--------------------------------------------------------------
+router.post("/logout", verifyToken, (req, res) => {
+  try {
+    res.sendStatus(200);
+  } catch (err) {
+    res.status(403).json(err);
+  }
+});
+
 export default router;
