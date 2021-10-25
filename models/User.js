@@ -33,17 +33,17 @@ const UserSchema = new Schema({
   },
   pathAvatar: {
     type: String,
-    default: "",
+    default: "images/dog.jpg",
+  },
+  posts: {
+    type: Array,
+    default: [],
   },
   followers: {
     type: Array,
     default: [],
   },
-  followings: {
-    type: Array,
-    default: [],
-  },
-  posts: {
+  following: {
     type: Array,
     default: [],
   },

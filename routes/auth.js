@@ -9,20 +9,6 @@ const saltRounds = 10;
 const router = express.Router();
 dotenv.config();
 //--------------------------------------------------------------
-router.get("/", verifyToken, async (req, res) => {
-  try {
-    const user = await User.findById(req.userId).select("-password");
-    if (!user)
-      return res
-        .status(400)
-        .json({ success: false, message: "User not found" });
-    res.json({ success: true, user });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal server error" });
-  }
-});
-//--------------------------------------------------------------
 router.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
   // Simple validation
