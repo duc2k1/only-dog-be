@@ -143,4 +143,20 @@ router.put("/:id/like", verifyToken, async (req, res) => {
     res.status(500).json(err);
   }
 });
+//--------------------------------------------------------------
+router.put("/:id/dislike", verifyToken, async (req, res) => {
+  try{
+    const post = await Post.findById(req.params.id);
+    if(!post.dislikes.includes(req.body.userId))
+    {
+      await post.updateOne({$push:{dislikes:req.body.userId}});
+      res.status(200).json("The post was disliked");
+    }else{
+      await post.updateOne({$pull:{dislikes:req.body.userId}});
+      res.status(200).json("The post was undisliked");
+    }
+  }catch (err){
+    res.status(500).json(err);
+  }
+});
 export default router;
