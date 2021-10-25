@@ -19,7 +19,7 @@ const UserSchema = new Schema({
   },
   pathAvatar: {
     type: String,
-    default: "images/dog.jpg",
+    default: "/images/dog.jpg",
   },
   posts: {
     type: Array,

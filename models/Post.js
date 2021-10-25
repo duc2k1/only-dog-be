@@ -9,15 +9,16 @@ const PostSchema = new Schema({
   },
   pathImage: {
     type: String,
-    default:"https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
+    default:
+      "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
   },
   likes: {
     type: Array,
-    default:[],
+    default: [],
   },
   dislikes: {
     type: Array,
-    default:[],
+    default: [],
   },
   createdAt: {
     type: Date,
