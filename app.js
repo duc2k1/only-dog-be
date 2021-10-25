@@ -1,9 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import authRouter from "./routes/auth.js";
-import postRouter from "./routes/post.js";
-import userRouter from "./routes/user.js";
+import authRouter from "./src/routes/auth.js";
+import postRouter from "./src/routes/post.js";
+import userRouter from "./src/routes/user.js";
 import helmet from "helmet";
 import dotenv from "dotenv";
 //--------------------------------------------------------------
