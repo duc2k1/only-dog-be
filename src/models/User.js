@@ -19,7 +19,7 @@ const UserSchema = new Schema({
   },
   pathAvatar: {
     type: String,
-    default: "/images/dog.jpg",
+    default: "https://picsum.photos/1000",
   },
   posts: {
     type: Array,

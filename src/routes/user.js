@@ -1,4 +1,5 @@
 import express from "express";
+import Post from "../models/Post.js";
 const router = express.Router();
 import User from "../models/User.js";
 //--------------------------------------------------------------
@@ -13,10 +14,11 @@ router.get("/", async (req, res) => {
 });
 //--------------------------------------------------------------
 router.get("/find_one", async (req, res) => {
-  const { user_id } = req.query;
+  const { user_id } = req.query; //get from URL ************
   if (user_id) {
     try {
       const user = await User.findOne({ _id: user_id });
+      user.posts = await Post.find({ userId: user_id });
       res.json({ success: true, user });
     } catch (error) {
       console.log(error);
