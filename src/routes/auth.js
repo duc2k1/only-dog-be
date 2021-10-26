@@ -85,4 +85,12 @@ router.post("/login", async (req, res) => {
   }
 });
 //--------------------------------------------------------------
+router.post("/logout", verifyToken, (req, res) => {
+  try {
+    res.sendStatus(200);
+  } catch (err) {
+    res.status(403).json(err);
+  }
+});
+
 export default router;
