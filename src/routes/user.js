@@ -18,7 +18,7 @@ router.get("/find_one", async (req, res) => {
   if (user_id) {
     try {
       const user = await User.findOne({ _id: user_id });
-      user.posts = await Post.find({ userId: user_id });
+      if (user) user.posts = await Post.find({ userId: user_id });
       res.json({ success: true, user });
     } catch (error) {
       console.log(error);
