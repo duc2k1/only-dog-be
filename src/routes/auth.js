@@ -85,7 +85,7 @@ router.post("/login", async (req, res) => {
   }
 });
 //--------------------------------------------------------------
-router.post("/logout", verifyToken, (req, res) => {
+router.post("/logout", (req, res) => {
   try {
     res.sendStatus(200);
   } catch (err) {
