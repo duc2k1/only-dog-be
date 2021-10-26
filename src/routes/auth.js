@@ -62,10 +62,10 @@ router.post("/login", async (req, res) => {
       return res
         .status(400)
         .json({ success: false, message: "Incorrect password" });
-    // const accessToken = jwt.sign({ userId: user._id },process.env.ACCESS_TOKEN_SECRET,{expiresIn: '60s'});
     const accessToken = jwt.sign(
       { userId: user._id },
-      process.env.ACCESS_TOKEN_SECRET
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "30m" }
     );
     res.json({
       success: true,
