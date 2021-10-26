@@ -65,10 +65,17 @@ router.post("/login", async (req, res) => {
     const accessToken = jwt.sign(
       { userId: user._id },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "30m" }
+      { expiresIn: "30s" }
     );
+    const refreshToken = jwt.sign(
+      { userId: user._id },
+      process.env.REFRESH_TOKEN_SECRET,
+      { expiresIn: "30s" }
+    );
+    refreshTokens.push(refreshToken);
     res.json({
       success: true,
+      refreshToken,
       accessToken,
     });
   } catch (error) {
@@ -85,4 +92,23 @@ router.post("/logout", (req, res) => {
   }
 });
 //--------------------------------------------------------------
+let refreshTokens = [];
+router.post("/refreshToken", (req, res) => {
+  const refreshToken = req.body.refreshToken;
+  if (!refreshToken) res.sendStatus(401);
+  if (!refreshTokens.includes(refreshToken)) res.sendStatus(403);
+
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, data) => {
+    console.log(err, data);
+    if (err) res.sendStatus(403);
+    const accessToken = jwt.sign(
+      { userName: data.username },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: "30s",
+      }
+    );
+    res.json({ accessToken });
+  });
+});
 export default router;

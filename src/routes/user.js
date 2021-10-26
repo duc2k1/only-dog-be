@@ -1,9 +1,10 @@
 import express from "express";
+import verifyToken from "../middlewares/auth.js";
 import Post from "../models/Post.js";
 const router = express.Router();
 import User from "../models/User.js";
 //--------------------------------------------------------------
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
     const users = await User.find();
     res.json({ success: true, users });
