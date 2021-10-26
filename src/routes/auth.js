@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import validateUserName from "../validate/validateUserName.js";
 import validateEmail from "../validate/validateEmail.js";
 import validatePassword from "../validate/validatePassword.js";
-import verifyToken from "../middleware/auth.js";
+import verifyToken from "../middlewares/auth.js";
 //--------------------------------------------------------------
 const saltRounds = 10;
 const router = express.Router();
