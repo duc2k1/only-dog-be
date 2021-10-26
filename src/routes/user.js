@@ -30,9 +30,5 @@ router.get("/find_one", async (req, res) => {
     res.status(404).json({ success: false, message: "Not found user" });
   }
 });
-
 //--------------------------------------------------------------
-
-//--------------------------------------------------------------
-
 export default router;
