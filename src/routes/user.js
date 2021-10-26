@@ -33,7 +33,6 @@ router.get("/find_one", async (req, res) => {
 //--------------------------------------------------------------
 //user_id: user current (userId) => send from body
 //user_id_follow: user has followed by another one
-
 router.put("/follow", async (req, res) => {
   const user_id = req.body.userId;
   const user_id_follow = req.query.user_id_follow;

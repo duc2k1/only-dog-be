@@ -1,2 +1,1 @@
-### Get all user / suggestion
 GET http://localhost:5500/users/find_one?user_id=6176bdf8dbfbe566dd2172a2
