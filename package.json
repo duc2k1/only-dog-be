@@ -5,7 +5,7 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "preinstall": "npx only-allow yarn",
+ 
     "start": "node app",
     "server": "nodemon app"
   },

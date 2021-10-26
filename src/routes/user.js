@@ -13,6 +13,7 @@ router.get("/", async (req, res) => {
   }
 });
 //--------------------------------------------------------------
+//post of user
 router.get("/find_one", async (req, res) => {
   const { user_id } = req.query; //get from URL ************
   if (user_id) {
@@ -45,19 +46,47 @@ router.put("/follow", async (req, res) => {
         if (!user.followers.includes(user_id)) {
           await user.updateOne({ $push: { followers: user_id } });
           await currentUser.updateOne({ $push: { following: user_id_follow } });
-          res.status(200).json("User was followed");
+          res.status(200).json({ success: true, message: "User was followed" });
         } else {
-          res.status(403).json("You allready follow this user");
+          res
+            .status(403)
+            .json({ success: false, message: "You allready follow this user" });
         }
       } catch (err) {
         res.status(500).json(err);
       }
     } else {
-      res.status(403).json("You can't follow yourself");
+      res
+        .status(403)
+        .json({ success: false, message: "You can't follow yourself" });
     }
   } else {
     res.status(404).json({ success: false, message: "Not found user" });
   }
+});
+//--------------------------------------------------------------
+router.get("/find/:userName", async (req, res) => {
+  const { userName } = req.params;
+  console.log("username" + userName);
+  if (!userName) {
+    res.json({ success: false, users: [] });
+  }
+  try {
+    const users = await User.find({
+      userName: { $regex: userName, $options: "i" },
+    });
+    if (!users.length) {
+      res.json({ success: false, users });
+    }
+    res.json({ success: true, users });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+//--------------------------------------------------------------
+router.get("/find", async (req, res) => {
+  res.json({ success: false, users: [] });
 });
 //--------------------------------------------------------------
 
