@@ -19,7 +19,7 @@ router.get("/find_one", async (req, res) => {
   if (user_id) {
     try {
       const user = await User.findOne({ _id: user_id });
-      user.posts = await Post.find({ userId: user_id });
+      if (user) user.posts = await Post.find({ userId: user_id });
       res.json({ success: true, user });
     } catch (error) {
       console.log(error);
@@ -29,6 +29,29 @@ router.get("/find_one", async (req, res) => {
     }
   } else {
     res.status(404).json({ success: false, message: "Not found user" });
+  }
+});
+//--------------------------------------------------------------
+//unfollow a user
+router.put("/:id/unfollow", async (req, res) => {
+  const user_id = req.body.userId;
+  const user_id_follow = req.query.user_id_follow;
+  if (user_id !== user_id_follow) {
+    try {
+      const user = await User.findById(user_id_follow);
+      const currentUser = await User.findById(user_id);
+      if (user.followers.includes(user_id)) {
+        await user.updateOne({ $pull: { followers: user_id } });
+        await currentUser.updateOne({ $pull: { followings: user_id_follow } });
+        res.status(200).json("User was unfollowed");
+      } else {
+        res.status(403).json("You don't follow this user");
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  } else {
+    res.status(403).json("You can't unfollow yourself");
   }
 });
 //--------------------------------------------------------------
