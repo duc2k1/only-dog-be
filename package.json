@@ -5,7 +5,6 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
- 
     "start": "node app",
     "server": "nodemon app"
   },
@@ -20,7 +19,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.12",
     "multer": "^1.4.3",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "redis": "^3.1.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.14"
