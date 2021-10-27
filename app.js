@@ -1,19 +1,21 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import helmet from "helmet";
+import dotenv from "dotenv";
 import authRouter from "./src/routes/auth.js";
 import postRouter from "./src/routes/post.js";
 import userRouter from "./src/routes/user.js";
-import helmet from "helmet";
-import dotenv from "dotenv";
+import path from "path";
 //--------------------------------------------------------------
 const app = express();
 const PORT = process.env.PORT || 5500;
 dotenv.config();
+const __dirname = path.resolve();
 //--------------------------------------------------------------
 const connectDB = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/only-dog", {
+    await mongoose.connect("mongodb://localhost:27017/only-dog-db", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
@@ -31,5 +33,6 @@ app.use(cors());
 app.use("/auth", authRouter);
 app.use("/posts", postRouter);
 app.use("/users", userRouter);
+app.use("/images", express.static(__dirname + "/src/images"));
 //--------------------------------------------------------------
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

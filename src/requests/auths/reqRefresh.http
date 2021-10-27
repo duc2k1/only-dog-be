@@ -1,7 +1,0 @@
-###
-POST http://localhost:5500/auth/refreshToken
-Content-Type: application/json
-
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTc4MTI4YmZiMDc3YjQxMjlmYWVjNjEiLCJpYXQiOjE2MzUyNjExNjgsImV4cCI6MTYzNTI2MTE5OH0.f6u9RLEKjeAE2_R4fAumvy5_6KO4UNIr-xvE5vOC-b4"
-}

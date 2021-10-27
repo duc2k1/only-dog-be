@@ -1,0 +1,4 @@
+###
+POST http://localhost:5500/auth/refresh_token
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTc5NmE0MmE0N2EyZjBjYmEzNGE3ZjIiLCJpYXQiOjE2MzUzNDg5NjF9.xzXrKCr07c7BuE_8zQ6SpWnQg9TkuCahdlUuoOd_Q30

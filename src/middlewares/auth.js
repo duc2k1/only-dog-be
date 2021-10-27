@@ -15,7 +15,6 @@ export default function verifyToken(req, res, next) {
     req.userId = decoded.userId;
     next();
   } catch (error) {
-    console.log(error);
     return res.status(403).json({ success: false, message: "Invalid token" });
   }
 }
