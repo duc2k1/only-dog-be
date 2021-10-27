@@ -13,7 +13,7 @@ dotenv.config();
 //--------------------------------------------------------------
 const connectDB = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/myapp", {
+    await mongoose.connect("mongodb://localhost:27017/only-dog", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
