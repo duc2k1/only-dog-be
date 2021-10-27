@@ -15,19 +15,20 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 //--------------------------------------------------------------
-router.get("/", verifyToken, async (req, res) => {
-  try {
-    const posts = await Post.find({ user: req.userId }).populate("user", [
-      "name",
-    ]);
-    res.json({ success: true, posts });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal server error" });
-  }
-});
+// router.get("/", verifyToken, async (req, res) => {
+//   const {userId} = req.
+//   try {
+//     const posts = await Post.find({ user: req.userId }).populate("user", [
+//       "name",
+//     ]);
+//     res.json({ success: true, posts });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ success: false, message: "Internal server error" });
+//   }
+// });
 //--------------------------------------------------------------
-router.get("/all-post", verifyToken, async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
     const posts = await Post.find();
     res.status(200).json({ success: true, posts });

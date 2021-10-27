@@ -15,7 +15,7 @@ router.get("/", verifyToken, async (req, res) => {
 });
 //--------------------------------------------------------------
 //use for profile user
-router.get("/find_one", async (req, res) => {
+router.get("/:userId", async (req, res) => {
   const { user_id } = req.query; //get from URL ************
   if (user_id) {
     try {
@@ -34,7 +34,7 @@ router.get("/find_one", async (req, res) => {
 });
 //--------------------------------------------------------------
 //unfollow a user
-router.put("/:id/unfollow", async (req, res) => {
+router.put("/unfollow/:userIdFollow", async (req, res) => {
   const user_id = req.body.userId;
   const user_id_follow = req.query.user_id_follow;
   if (user_id !== user_id_follow) {
@@ -58,7 +58,7 @@ router.put("/:id/unfollow", async (req, res) => {
 //--------------------------------------------------------------
 //user_id: user current (userId) => send from body
 //user_id_follow: user has followed by another one
-router.put("/follow", async (req, res) => {
+router.put("/follow/:userIdFollow", async (req, res) => {
   const user_id = req.body.userId;
   const user_id_follow = req.query.user_id_follow;
   if (user_id_follow) {

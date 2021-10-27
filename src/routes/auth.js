@@ -70,7 +70,7 @@ router.post("/login", async (req, res) => {
     const refreshToken = jwt.sign(
       { userId: user._id },
       process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "30s" }
+      { expiresIn: "3d" }
     );
     refreshTokens.push(refreshToken);
     res.json({
@@ -85,11 +85,9 @@ router.post("/login", async (req, res) => {
 });
 //--------------------------------------------------------------
 router.post("/logout", (req, res) => {
-  try {
-    res.sendStatus(200);
-  } catch (err) {
-    res.status(403).json(err);
-  }
+  const refreshToken = req.body.token;
+  refreshTokens = refreshTokens.filter((refToken) => refToken !== refreshToken);
+  res.sendStatus(200);
 });
 //--------------------------------------------------------------
 let refreshTokens = [];
