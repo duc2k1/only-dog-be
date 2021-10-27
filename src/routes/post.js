@@ -146,15 +146,9 @@ router.delete("/:id", verifyToken, async (req, res) => {
   }
 });
 //--------------------------------------------------------------
-<<<<<<< HEAD
-router.put("/:id/like", verifyToken, async (req, res) => {
-  try {
-    const post = await Post.findById(req.params.id);
-=======
 router.put("/like/:postId", verifyToken, async (req, res) => {
   try {
     const post = await Post.findById(req.params.postId);
->>>>>>> feature/AddPost
 
     if (!post.likes.includes(req.body.userId)) {
       await post.updateOne({ $push: { likes: req.body.userId } });
@@ -168,15 +162,9 @@ router.put("/like/:postId", verifyToken, async (req, res) => {
   }
 });
 //--------------------------------------------------------------
-<<<<<<< HEAD
-router.put("/:id/dislike", verifyToken, async (req, res) => {
-  try {
-    const post = await Post.findById(req.params.id);
-=======
 router.put("/dislike/:postId", verifyToken, async (req, res) => {
   try {
     const post = await Post.findById(req.params.postId);
->>>>>>> feature/AddPost
     if (!post.dislikes.includes(req.body.userId)) {
       await post.updateOne({ $push: { dislikes: req.body.userId } });
       res.status(200).json("The post was disliked");
