@@ -11,12 +11,12 @@ import validatePassword from "../validate/validatePassword.js";
 const saltRounds = 10;
 const router = express.Router();
 dotenv.config();
-let refreshTokens = [];
 const redisClient = redis.createClient({
   host: process.env.REDIS_HOST,
   port: process.env.REDIS_PORT,
   password: process.env.REDIS_PASSWORD,
 });
+let refreshTokens = [];
 const key = "refreshToken";
 //--------------------------------------------------------------
 router.post("/remove_refresh_token", (req, res) => {
