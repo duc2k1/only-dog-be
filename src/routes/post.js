@@ -18,8 +18,9 @@ const upload = multer({ storage: storage });
 //--------------------------------------------------------------
 router.post("/add", verifyToken, async (req, res) => {
   try {
+    const { userId } = req.body;
     const post = await Post({
-      userId: "61796a42a47a2f0cba34a7f2",
+      userId,
     }).save();
     res.status(200).json({ success: true, post });
   } catch (error) {
@@ -101,7 +102,7 @@ router.put("/dislike", verifyToken, async (req, res) => {
   }
 });
 //--------------------------------------------------------------
-router.get("/", async (req, res) => {
+router.get("/get_all", async (req, res) => {
   try {
     const posts = await Post.find({});
     res.status(200).json({ success: true, posts });
