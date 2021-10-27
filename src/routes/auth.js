@@ -1,8 +1,9 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
+import redis from "redis";
 import dotenv from "dotenv";
+import User from "../models/User.js";
 import validateUserName from "../validate/validateUserName.js";
 import validateEmail from "../validate/validateEmail.js";
 import validatePassword from "../validate/validatePassword.js";
@@ -10,17 +11,36 @@ import validatePassword from "../validate/validatePassword.js";
 const saltRounds = 10;
 const router = express.Router();
 dotenv.config();
+let refreshTokens = [];
+const redisClient = redis.createClient({
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
+  password: process.env.REDIS_PASSWORD,
+});
+const key = "refreshToken";
 //--------------------------------------------------------------
-router.post("/logout", (req, res) => {
+router.post("/remove_refresh_token", (req, res) => {
   try {
-    res.sendStatus(200);
+    const refreshToken = req.headers.authorization.split(" ")[1];
+    redisClient.get(key, (err, data) => {
+      if (err) return;
+      if (data) {
+        refreshTokens = JSON.parse(data).filter(
+          (refToken) => refToken !== refreshToken
+        );
+        console.log("~ refreshTokens", refreshTokens);
+        redisClient.set(key, JSON.stringify(refreshTokens));
+      }
+    });
+    res
+      .status(200)
+      .json({ success: true, message: "Remove refresh token success" });
   } catch (err) {
-    res.status(403).json(err);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
 //--------------------------------------------------------------
-let refreshTokens = [];
-router.post("/refresh_token", (req, res) => {
+router.post("/refresh_access_token", (req, res) => {
   const refreshToken = req.headers.authorization.split(" ")[1];
   if (!refreshToken) {
     res.status(401).json({ success: false, message: "Unauthorized" });
@@ -80,6 +100,15 @@ router.post("/register", async (req, res) => {
       accessToken,
       refreshToken,
     });
+    redisClient.get(key, (err, data) => {
+      if (err) return;
+      if (data) {
+        refreshTokens = JSON.parse(data);
+        refreshTokens.push(refreshToken);
+        console.log("~ refreshTokens", refreshTokens);
+        redisClient.set(key, JSON.stringify(refreshTokens));
+      }
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
@@ -98,7 +127,7 @@ router.post("/login", async (req, res) => {
       return res
         .status(400)
         .json({ success: false, message: "Not found Email" });
-    const passwordValid = bcrypt.compareSync(password, user.password); // true
+    const passwordValid = bcrypt.compareSync(password, user.password);
     if (!passwordValid)
       return res
         .status(400)
@@ -119,7 +148,17 @@ router.post("/login", async (req, res) => {
       accessToken,
       refreshToken,
     });
+    redisClient.get(key, (err, data) => {
+      if (err) return;
+      if (data) {
+        refreshTokens = JSON.parse(data);
+        refreshTokens.push(refreshToken);
+        console.log("~ refreshTokens", refreshTokens);
+        redisClient.set(key, JSON.stringify(refreshTokens));
+      }
+    });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });

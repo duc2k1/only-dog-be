@@ -15,7 +15,7 @@ const __dirname = path.resolve();
 //--------------------------------------------------------------
 const connectDB = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/only-dog-db", {
+    await mongoose.connect(process.env.DB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

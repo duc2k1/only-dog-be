@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import verifyToken from "../middlewares/auth.js";
+import verifyAccessToken from "../middlewares/verifyAccessToken.js";
 import Post from "../models/Post.js";
 import jwt from "jsonwebtoken";
 //--------------------------------------------------------------
@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 //--------------------------------------------------------------
-router.post("/add", verifyToken, async (req, res) => {
+router.post("/add", verifyAccessToken, async (req, res) => {
   try {
     const { userId } = req.body;
     const post = await Post({
@@ -28,7 +28,7 @@ router.post("/add", verifyToken, async (req, res) => {
   }
 });
 //--------------------------------------------------------------
-router.put("/like", verifyToken, async (req, res) => {
+router.put("/like", verifyAccessToken, async (req, res) => {
   try {
     const { userId, postId } = req.body;
     const accessToken = req.headers.authorization.split(" ")[1];
@@ -65,7 +65,7 @@ router.put("/like", verifyToken, async (req, res) => {
   }
 });
 //--------------------------------------------------------------
-router.put("/dislike", verifyToken, async (req, res) => {
+router.put("/dislike", verifyAccessToken, async (req, res) => {
   try {
     const { userId, postId } = req.body;
     const accessToken = req.headers.authorization.split(" ")[1];

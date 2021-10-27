@@ -1,5 +1,5 @@
 import express from "express";
-import verifyToken from "../middlewares/auth.js";
+import verifyAccessToken from "../middlewares/verifyAccessToken.js";
 import Post from "../models/Post.js";
 const router = express.Router();
 import User from "../models/User.js";
@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 //--------------------------------------------------------------
 //user_id: user current (userId) => send from body
 //user_id_follow: user has followed by another one
-router.put("/follow_and_unfollow", verifyToken, async (req, res) => {
+router.put("/follow_and_unfollow", verifyAccessToken, async (req, res) => {
   const { userIdFollow, userIdBeFollow } = req.body;
   const accessToken = req.headers.authorization.split(" ")[1];
   if (userIdFollow !== jwt.decode(accessToken).userId) {
