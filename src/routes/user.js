@@ -8,6 +8,7 @@ import jwt from "jsonwebtoken";
 //use for dashboard user
 router.get("/dashboard/:userId", async (req, res) => {
   try {
+    //-------------------------------------------------------------
     const { userId } = req.params;
     if (!userId) {
       res.status(404).json({ success: false, message: "Not found userId" });
@@ -18,8 +19,15 @@ router.get("/dashboard/:userId", async (req, res) => {
       res.status(404).json({ success: false, message: "Not found user" });
       return;
     }
+    //------------------------------------------------------------
     user.posts = await Post.find().where("userId").in(user.followers);
-    res.json({ success: true, user });
+    await user.posts.forEach(async (val) => {
+      await User.findById(val.userId)
+        .then((val) => (val.user = val))
+        .then(() => {
+          res.status(200).json({ success: false, user });
+        });
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
   }

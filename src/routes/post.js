@@ -142,6 +142,7 @@ router.get("/get_all", async (req, res) => {
 //--------------------------------------------------------------
 router.post("/upload", upload.single("avatar"), async (req, res, next) => {
   const file = req.file;
+  console.log(file);
   if (!file) {
     const error = new Error("Please upload a file");
     error.httpStatusCode = 400;
