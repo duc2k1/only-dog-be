@@ -58,10 +58,10 @@ router.get("/find_by_name/:userName", async (req, res) => {
     return;
   }
   try {
-    const user = await User.find({
+    const users = await User.find({
       userName: { $regex: userName, $options: "i" },
     }).select("-password");
-    res.json({ success: true, user });
+    res.json({ success: true, users });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
