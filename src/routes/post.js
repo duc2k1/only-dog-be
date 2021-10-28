@@ -9,7 +9,7 @@ const router = express.Router();
 //--------------------------------------------------------------
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "images");
+    cb(null, "src/images");
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
@@ -17,9 +17,9 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 //--------------------------------------------------------------
-router.post("/add", verifyAccessToken, async (req, res) => {
+router.post("/add/:userId", verifyAccessToken, async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId } = req.params;
     if (!userId) {
       res.status(404).json({ success: false, message: "Not found userId" });
       return;
