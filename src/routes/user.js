@@ -5,7 +5,27 @@ const router = express.Router();
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 //--------------------------------------------------------------
-//user_id: user current (userId) => send from body
+//use for dashboard user
+router.get("/dashboard/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    if (!userId) {
+      res.status(404).json({ success: false, message: "Not found userId" });
+      return;
+    }
+    const user = await User.findById(userId).select("-password");
+    if (!user) {
+      res.status(404).json({ success: false, message: "Not found user" });
+      return;
+    }
+    user.posts = await Post.find().where("userId").in(user.followers);
+    res.json({ success: true, user });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+//--------------------------------------------------------------
+//user_id: user current (userId) => send from params
 //user_id_follow: user has followed by another one
 router.put("/follow_and_unfollow", verifyAccessToken, async (req, res) => {
   try {
@@ -72,11 +92,15 @@ router.get("/find_by_id/:userId", async (req, res) => {
   try {
     const { userId } = req.params; //get from body
     if (!userId) {
-      res.status(404).json({ success: false, message: "Not found user" });
+      res.status(404).json({ success: false, message: "Not found userId" });
       return;
     }
     const user = await User.findById(userId).select("-password");
-    if (user) user.posts = await Post.find().where("_id").in(user.posts);
+    if (!user) {
+      res.status(404).json({ success: false, message: "Not found user" });
+      return;
+    }
+    user.posts = await Post.find().where("_id").in(user.posts);
     res.json({ success: true, user });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
