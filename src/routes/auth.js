@@ -11,13 +11,25 @@ import validatePassword from "../validate/validatePassword.js";
 const saltRounds = 10;
 const router = express.Router();
 dotenv.config();
-const redisClient = redis.createClient({
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT,
-  password: process.env.REDIS_PASSWORD,
-});
+const redisClient = redis.createClient();
 let refreshTokens = [];
 const key = "refreshToken";
+//--------------------------------------------------------------
+router.delete("/remove_all_refresh_token", (req, res) => {
+  try {
+    redisClient.get(key, (err, data) => {
+      if (err) return;
+      if (data) {
+        redisClient.set(key, JSON.stringify([]));
+      }
+    });
+    res
+      .status(200)
+      .json({ success: true, message: "Remove all refresh token success" });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
 //--------------------------------------------------------------
 router.delete("/remove_refresh_token", (req, res) => {
   try {
