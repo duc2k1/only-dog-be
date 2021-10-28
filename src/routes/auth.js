@@ -11,7 +11,11 @@ import validatePassword from "../validate/validatePassword.js";
 const saltRounds = 10;
 const router = express.Router();
 dotenv.config();
-const redisClient = redis.createClient();
+const redisClient = redis.createClient({
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
+  password: process.env.REDIS_PASSWORD,
+});
 let refreshTokens = [];
 const key = "refreshToken";
 //--------------------------------------------------------------
@@ -152,7 +156,7 @@ router.post("/login", async (req, res) => {
     const refreshToken = jwt.sign(
       { userId: user._id },
       process.env.REFRESH_TOKEN_SECRET
-      // { expiresIn: "30s" }
+      // { expiresIn: "7d" }
     );
     refreshTokens.push(refreshToken);
     res.json({
