@@ -49,6 +49,15 @@ router.put("/like", verifyAccessToken, async (req, res) => {
     const post = await Post.findById(postId);
     if (!post.likes.includes(userId)) {
       await post.updateOne({ $push: { likes: userId } });
+      //check user da disliked trc do chua, neu r thi undisliked
+      if (post.dislikes.includes(userId)) {
+        await post.updateOne({ $pull: { dislikes: userId } });
+        res.status(200).json({
+          success: true,
+          message: userId + " liked and undisliked post " + postId,
+        });
+        return;
+      }
       res.status(200).json({
         success: true,
         message: userId + " liked post " + postId,
@@ -86,6 +95,15 @@ router.put("/dislike", verifyAccessToken, async (req, res) => {
     const post = await Post.findById(postId);
     if (!post.dislikes.includes(userId)) {
       await post.updateOne({ $push: { dislikes: userId } });
+      //check user da liked trc do chua, neu r thi unliked
+      if (post.likes.includes(userId)) {
+        await post.updateOne({ $pull: { likes: userId } });
+        res.status(200).json({
+          success: true,
+          message: userId + " disliked and unliked post " + postId,
+        });
+        return;
+      }
       res.status(200).json({
         success: true,
         message: userId + " disliked post " + postId,
