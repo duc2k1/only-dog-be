@@ -2,9 +2,9 @@
 ### Bearer accessToken
 PUT http://localhost:5500/users/follow_and_unfollow
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MzUzNTgxNjd9.jYBa8hQeoFu6QO7PAcSClkd3BsAR_EWMjZUQ2x121QM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTdhY2E2NTVkMDYxZGZlMDhiOWMyZGMiLCJpYXQiOjE2MzU0Mzc2Nzl9.TqwqinxCuzGQLryNtPoc2d54ah6PSdXnq9VyIRA42t0
 
 {
-  "userIdFollow":"61796a42a47a2f0cba34a7f2",
-  "userIdBeFollow":"61796a43a47a2f0cba34a7f5"
+  "userIdFollow":"617aca655d061dfe08b9c2dc",
+  "userIdBeFollow":"617aca645d061dfe08b9c2d9"
 }

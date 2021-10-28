@@ -29,8 +29,10 @@ router.post("/add/:userId", verifyAccessToken, async (req, res) => {
       res.status(404).json({ success: false, message: "Not found user" });
       return;
     }
+    const userOb = {};
     const post = await Post({
       userId,
+      userOb,
     }).save();
     await user.updateOne({ $push: { posts: post._id.toString() } });
     res.status(200).json({ success: true, post, user });

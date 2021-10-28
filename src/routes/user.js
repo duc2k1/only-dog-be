@@ -20,14 +20,16 @@ router.get("/dashboard/:userId", async (req, res) => {
       return;
     }
     //------------------------------------------------------------
-    user.posts = await Post.find().where("userId").in(user.followers);
-    await user.posts.forEach(async (val) => {
-      await User.findById(val.userId)
-        .then((val) => (val.user = val))
-        .then(() => {
-          res.status(200).json({ success: false, user });
-        });
-    });
+    user.posts = await Post.find().where("userId").in(user.followings);
+    const arrUser = await Promise.all(
+      user.posts.map(
+        async (val) => await User.findById(val.userId).then((val) => val)
+      )
+    );
+    for (let i = 0; i < arrUser.length; i++) {
+      user.posts[i].userOb = arrUser[i];
+    }
+    res.status(200).json({ success: true, posts: user.posts });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
