@@ -1,4 +1,4 @@
 ###
-POST http://localhost:5500/auth/remove_refresh_token
+delete http://localhost:5500/auth/remove_refresh_token
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTc5NmE0MmE0N2EyZjBjYmEzNGE3ZjIiLCJpYXQiOjE2MzUzNTY5ODN9.AM1m9wxdHL7uUhu1w-ds9ey8JbH9mbw_LMby5Qfemu8

@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "preinstall": "npx only-allow yarn",
-    "start": "node app",
-    "server": "nodemon app"
+    "dev": "node app",
+    "deploy": "git push heroku",
+    "product": "nodemon app"
   },
   "author": "",
   "license": "ISC",

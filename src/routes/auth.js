@@ -19,7 +19,7 @@ const redisClient = redis.createClient({
 let refreshTokens = [];
 const key = "refreshToken";
 //--------------------------------------------------------------
-router.post("/remove_refresh_token", (req, res) => {
+router.delete("/remove_refresh_token", (req, res) => {
   try {
     const refreshToken = req.headers.authorization.split(" ")[1];
     redisClient.get(key, (err, data) => {
@@ -40,7 +40,7 @@ router.post("/remove_refresh_token", (req, res) => {
   }
 });
 //--------------------------------------------------------------
-router.post("/refresh_access_token", (req, res) => {
+router.put("/refresh_access_token", (req, res) => {
   const refreshToken = req.headers.authorization.split(" ")[1];
   if (!refreshToken) {
     res.status(401).json({ success: false, message: "Unauthorized" });
