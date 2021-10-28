@@ -51,8 +51,8 @@ router.put("/follow_and_unfollow", verifyAccessToken, async (req, res) => {
 });
 //--------------------------------------------------------------
 //use for find user by name
-router.get("/find_by_name", async (req, res) => {
-  const { userName } = req.body; //get from body
+router.get("/find_by_name/:userName", async (req, res) => {
+  const { userName } = req.params; //get from body
   if (!userName) {
     res.status(404).json({ success: false, message: "Not found user" });
     return;
@@ -60,7 +60,7 @@ router.get("/find_by_name", async (req, res) => {
   try {
     const user = await User.find({
       userName: { $regex: userName, $options: "i" },
-    });
+    }).select("-password");
     res.json({ success: true, user });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
@@ -68,14 +68,14 @@ router.get("/find_by_name", async (req, res) => {
 });
 //--------------------------------------------------------------
 //use for profile user
-router.get("/find_by_id", async (req, res) => {
-  const { userId } = req.body; //get from body
+router.get("/find_by_id/:userId", async (req, res) => {
+  const { userId } = req.params; //get from body
   if (!userId) {
     res.status(404).json({ success: false, message: "Not found user" });
     return;
   }
   try {
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).select("-password");
     if (user) user.posts = await Post.find({ userId });
     res.json({ success: true, user });
   } catch (error) {
@@ -85,7 +85,7 @@ router.get("/find_by_id", async (req, res) => {
 //--------------------------------------------------------------
 router.get("/get_all", async (req, res) => {
   try {
-    const users = await User.find({});
+    const users = await User.find({}).select("-password");
     res.json({ success: true, users });
   } catch (error) {
     console.log(error);
