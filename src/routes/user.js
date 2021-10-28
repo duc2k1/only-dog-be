@@ -8,30 +8,30 @@ import jwt from "jsonwebtoken";
 //user_id: user current (userId) => send from body
 //user_id_follow: user has followed by another one
 router.put("/follow_and_unfollow", verifyAccessToken, async (req, res) => {
-  const { userIdFollow, userIdBeFollow } = req.body;
-  const accessToken = req.headers.authorization.split(" ")[1];
-  if (userIdFollow !== jwt.decode(accessToken).userId) {
-    res.status(403).json({
-      success: false,
-      message: "Invalid userId",
-    });
-    return;
-  }
-  if (!userIdFollow || !userIdBeFollow) {
-    res.status(404).json({
-      success: false,
-      message: "Not have userIdFollow and/or userIdBeFollow",
-    });
-    return;
-  }
-  if (userIdFollow === userIdBeFollow) {
-    res.status(403).json({
-      success: false,
-      message: "You can't follow yourself",
-    });
-    return;
-  }
   try {
+    const { userIdFollow, userIdBeFollow } = req.body;
+    const accessToken = req.headers.authorization.split(" ")[1];
+    if (userIdFollow !== jwt.decode(accessToken).userId) {
+      res.status(403).json({
+        success: false,
+        message: "Invalid userId",
+      });
+      return;
+    }
+    if (!userIdFollow || !userIdBeFollow) {
+      res.status(404).json({
+        success: false,
+        message: "Not have userIdFollow and/or userIdBeFollow",
+      });
+      return;
+    }
+    if (userIdFollow === userIdBeFollow) {
+      res.status(403).json({
+        success: false,
+        message: "You can't follow yourself",
+      });
+      return;
+    }
     const yourSelf = await User.findById(userIdFollow);
     const userBeFollow = await User.findById(userIdBeFollow);
     if (!yourSelf.followings.includes(userIdBeFollow)) {
@@ -52,12 +52,12 @@ router.put("/follow_and_unfollow", verifyAccessToken, async (req, res) => {
 //--------------------------------------------------------------
 //use for find user by name
 router.get("/find_by_name/:userName", async (req, res) => {
-  const { userName } = req.params; //get from body
-  if (!userName) {
-    res.status(404).json({ success: false, message: "Not found user" });
-    return;
-  }
   try {
+    const { userName } = req.params; //get from body
+    if (!userName) {
+      res.status(404).json({ success: false, message: "Not found user" });
+      return;
+    }
     const users = await User.find({
       userName: { $regex: userName, $options: "i" },
     }).select("-password");
@@ -69,14 +69,14 @@ router.get("/find_by_name/:userName", async (req, res) => {
 //--------------------------------------------------------------
 //use for profile user
 router.get("/find_by_id/:userId", async (req, res) => {
-  const { userId } = req.params; //get from body
-  if (!userId) {
-    res.status(404).json({ success: false, message: "Not found user" });
-    return;
-  }
   try {
+    const { userId } = req.params; //get from body
+    if (!userId) {
+      res.status(404).json({ success: false, message: "Not found user" });
+      return;
+    }
     const user = await User.findById(userId).select("-password");
-    if (user) user.posts = await Post.find({ userId });
+    if (user) user.posts = await Post.find().where("_id").in(user.posts);
     res.json({ success: true, user });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });

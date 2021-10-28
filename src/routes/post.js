@@ -2,6 +2,7 @@ import express from "express";
 import multer from "multer";
 import verifyAccessToken from "../middlewares/verifyAccessToken.js";
 import Post from "../models/Post.js";
+import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 //--------------------------------------------------------------
 const router = express.Router();
@@ -19,10 +20,20 @@ const upload = multer({ storage: storage });
 router.post("/add", verifyAccessToken, async (req, res) => {
   try {
     const { userId } = req.body;
+    if (!userId) {
+      res.status(404).json({ success: false, message: "Not found userId" });
+      return;
+    }
+    const user = await User.findById(userId);
+    if (!user) {
+      res.status(404).json({ success: false, message: "Not found user" });
+      return;
+    }
     const post = await Post({
       userId,
     }).save();
-    res.status(200).json({ success: true, post });
+    await user.updateOne({ $push: { posts: post._id.toString() } });
+    res.status(200).json({ success: true, post, user });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
