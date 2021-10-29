@@ -1,0 +1,2 @@
+### /:userId
+GET http://localhost:5500/users/dashboard/617b4a068a43067384932e30

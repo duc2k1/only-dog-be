@@ -1,107 +1,128 @@
 import express from "express";
-import verifyToken from "../middlewares/auth.js";
+import verifyAccessToken from "../middlewares/verifyAccessToken.js";
 import Post from "../models/Post.js";
 const router = express.Router();
 import User from "../models/User.js";
+import jwt from "jsonwebtoken";
 //--------------------------------------------------------------
-router.get("/", verifyToken, async (req, res) => {
+//use for dashboard user
+router.get("/dashboard/:userId", async (req, res) => {
   try {
-    const users = await User.find();
+    //-------------------------------------------------------------
+    const { userId } = req.params;
+    if (!userId) {
+      res.status(404).json({ success: false, message: "Not found userId" });
+      return;
+    }
+    const user = await User.findById(userId).select("-password");
+    if (!user) {
+      res.status(404).json({ success: false, message: "Not found user" });
+      return;
+    }
+    //------------------------------------------------------------
+    user.posts = await Post.find().where("userId").in(user.followings);
+    const arrUser = await Promise.all(
+      user.posts.map(
+        async (val) =>
+          await User.findById(val.userId)
+            .select("-password")
+            .then((val) => val)
+      )
+    );
+    for (let i = 0; i < arrUser.length; i++) {
+      user.posts[i].userOb = arrUser[i];
+    }
+    res.status(200).json({ success: true, posts: user.posts });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+//--------------------------------------------------------------
+//user_id: user current (userId) => send from params
+//user_id_follow: user has followed by another one
+router.put("/follow_and_unfollow", verifyAccessToken, async (req, res) => {
+  try {
+    const { userIdFollow, userIdBeFollow } = req.body;
+    const accessToken = req.headers.authorization.split(" ")[1];
+    if (userIdFollow !== jwt.decode(accessToken).userId) {
+      res.status(403).json({
+        success: false,
+        message: "Invalid userId",
+      });
+      return;
+    }
+    if (!userIdFollow || !userIdBeFollow) {
+      res.status(404).json({
+        success: false,
+        message: "Not have userIdFollow and/or userIdBeFollow",
+      });
+      return;
+    }
+    if (userIdFollow === userIdBeFollow) {
+      res.status(403).json({
+        success: false,
+        message: "You can't follow yourself",
+      });
+      return;
+    }
+    const yourSelf = await User.findById(userIdFollow);
+    const userBeFollow = await User.findById(userIdBeFollow);
+    if (!yourSelf.followings.includes(userIdBeFollow)) {
+      //follow
+      await yourSelf.updateOne({ $push: { followings: userIdBeFollow } }); //yourself
+      await userBeFollow.updateOne({ $push: { followers: userIdFollow } }); //other user
+      res.status(200).json({ success: true, message: "User was followed" });
+    } else {
+      //unfollow
+      await yourSelf.updateOne({ $pull: { followings: userIdBeFollow } }); //yourself
+      await userBeFollow.updateOne({ $pull: { followers: userIdFollow } }); //other user
+      res.status(200).json({ success: true, message: "User was unfollowed" });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+//--------------------------------------------------------------
+//use for find user by name
+router.get("/find_by_name/:userName", async (req, res) => {
+  try {
+    const { userName } = req.params; //get from body
+    if (!userName) {
+      res.status(404).json({ success: false, message: "Not found user" });
+      return;
+    }
+    const users = await User.find({
+      userName: { $regex: userName, $options: "i" },
+    }).select("-password");
     res.json({ success: true, users });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
 //--------------------------------------------------------------
 //use for profile user
-router.get("/:userId", async (req, res) => {
-  const { user_id } = req.query; //get from URL ************
-  if (user_id) {
-    try {
-      const user = await User.findOne({ _id: user_id });
-      if (user) user.posts = await Post.find({ userId: user_id });
-      res.json({ success: true, user });
-    } catch (error) {
-      console.log(error);
-      res
-        .status(500)
-        .json({ success: false, message: "Internal server error" });
-    }
-  } else {
-    res.status(404).json({ success: false, message: "Not found user" });
-  }
-});
-//--------------------------------------------------------------
-//unfollow a user
-router.put("/unfollow/:userIdFollow", async (req, res) => {
-  const user_id = req.body.userId;
-  const user_id_follow = req.query.user_id_follow;
-  if (user_id !== user_id_follow) {
-    try {
-      const user = await User.findById(user_id_follow);
-      const currentUser = await User.findById(user_id);
-      if (user.followers.includes(user_id)) {
-        await user.updateOne({ $pull: { followers: user_id } });
-        await currentUser.updateOne({ $pull: { followings: user_id_follow } });
-        res.status(200).json("User was unfollowed");
-      } else {
-        res.status(403).json("You don't follow this user");
-      }
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  } else {
-    res.status(403).json("You can't unfollow yourself");
-  }
-});
-//--------------------------------------------------------------
-//user_id: user current (userId) => send from body
-//user_id_follow: user has followed by another one
-router.put("/follow/:userIdFollow", async (req, res) => {
-  const user_id = req.body.userId;
-  const user_id_follow = req.query.user_id_follow;
-  if (user_id_follow) {
-    if (req.body.userId !== req.query.user_id_follow) {
-      try {
-        const user = await User.findById(user_id_follow);
-        const currentUser = await User.findById(user_id);
-        //check followers list
-        if (!user.followers.includes(user_id)) {
-          await user.updateOne({ $push: { followers: user_id } });
-          await currentUser.updateOne({ $push: { following: user_id_follow } });
-          res.status(200).json({ success: true, message: "User was followed" });
-        } else {
-          res
-            .status(403)
-            .json({ success: false, message: "You allready follow this user" });
-        }
-      } catch (err) {
-        res.status(500).json(err);
-      }
-    } else {
-      res
-        .status(403)
-        .json({ success: false, message: "You can't follow yourself" });
-    }
-  } else {
-    res.status(404).json({ success: false, message: "Not found user" });
-  }
-});
-//--------------------------------------------------------------
-router.get("/find/:userName", async (req, res) => {
-  const { userName } = req.params;
-  console.log("username" + userName);
-  if (!userName) {
-    res.json({ success: false, users: [] });
-  }
+router.get("/find_by_id/:userId", async (req, res) => {
   try {
-    const users = await User.find({
-      userName: { $regex: userName, $options: "i" },
-    });
-    if (!users.length) {
-      res.json({ success: false, users });
+    const { userId } = req.params; //get from body
+    if (!userId) {
+      res.status(404).json({ success: false, message: "Not found userId" });
+      return;
     }
+    const user = await User.findById(userId).select("-password");
+    if (!user) {
+      res.status(404).json({ success: false, message: "Not found user" });
+      return;
+    }
+    user.posts = await Post.find().where("_id").in(user.posts);
+    res.json({ success: true, user });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+//--------------------------------------------------------------
+router.get("/get_all", async (req, res) => {
+  try {
+    const users = await User.find({}).select("-password");
     res.json({ success: true, users });
   } catch (error) {
     console.log(error);
@@ -109,9 +130,4 @@ router.get("/find/:userName", async (req, res) => {
   }
 });
 //--------------------------------------------------------------
-router.get("/find", async (req, res) => {
-  res.json({ success: false, users: [] });
-});
-//--------------------------------------------------------------
-
 export default router;

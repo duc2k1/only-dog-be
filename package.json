@@ -5,9 +5,10 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
- 
-    "start": "node app",
-    "server": "nodemon app"
+    "preinstall": "npx only-allow yarn",
+    "dev": "nodemon app",
+    "deploy": "git push heroku",
+    "product": "node app"
   },
   "author": "",
   "license": "ISC",
@@ -20,7 +21,9 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.12",
     "multer": "^1.4.3",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "redis": "^3.1.2",
+    "sharp": "^0.29.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.14"
