@@ -4,8 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 //--------------------------------------------------------------
 export default function verifyAccessToken(req, res, next) {
-  const authHeader = req.header("Authorization");
-  const accessToken = authHeader && authHeader.split(" ")[1];
+  const accessToken = req.headers.authorization.split(" ")[1];
   if (!accessToken)
     return res
       .status(401)

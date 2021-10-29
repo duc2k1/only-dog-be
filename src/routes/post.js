@@ -9,37 +9,58 @@ const router = express.Router();
 //--------------------------------------------------------------
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "src/images");
+    cb(null, "src/images/posts/");
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    file.originalname = file.originalname.trim().replace(/ /g, "-");
+    cb(null, req.params.userId + file.originalname);
   },
 });
 const upload = multer({ storage: storage });
 //--------------------------------------------------------------
-router.post("/add/:userId", verifyAccessToken, async (req, res) => {
-  try {
-    const { userId } = req.params;
-    if (!userId) {
-      res.status(404).json({ success: false, message: "Not found userId" });
-      return;
+router.post(
+  "/add_image_post/:userId",
+  verifyAccessToken,
+  upload.single("imagePost"),
+  async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const file = req.file;
+      if (!userId) {
+        res.status(404).json({ success: false, message: "Not found userId" });
+        return;
+      }
+      if (!file) {
+        res.status(404).json({ success: false, message: "Not found file" });
+        return;
+      }
+      const user = await User.findById(userId);
+      if (!user) {
+        res.status(404).json({ success: false, message: "Not found user" });
+        return;
+      }
+      const userOb = {};
+      file.originalname = file.originalname.trim().replace(/ /g, "-");
+      const post = await Post({
+        userId,
+        userOb,
+        pathImage: "/images/posts/" + req.params.userId + file.originalname,
+      }).save();
+      if (!post) {
+        res
+          .status(500)
+          .json({ success: false, message: "can not create post" });
+        return;
+      }
+      await user.updateOne({ $push: { posts: post._id.toString() } });
+      res.status(200).json({ success: true, post });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
     }
-    const user = await User.findById(userId);
-    if (!user) {
-      res.status(404).json({ success: false, message: "Not found user" });
-      return;
-    }
-    const userOb = {};
-    const post = await Post({
-      userId,
-      userOb,
-    }).save();
-    await user.updateOne({ $push: { posts: post._id.toString() } });
-    res.status(200).json({ success: true, post, user });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
   }
-});
+);
 //--------------------------------------------------------------
 router.put("/like", verifyAccessToken, async (req, res) => {
   try {
@@ -144,7 +165,6 @@ router.get("/get_all", async (req, res) => {
 //--------------------------------------------------------------
 router.post("/upload", upload.single("avatar"), async (req, res, next) => {
   const file = req.file;
-  console.log(file);
   if (!file) {
     const error = new Error("Please upload a file");
     error.httpStatusCode = 400;
