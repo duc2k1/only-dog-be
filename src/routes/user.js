@@ -23,7 +23,10 @@ router.get("/dashboard/:userId", async (req, res) => {
     user.posts = await Post.find().where("userId").in(user.followings);
     const arrUser = await Promise.all(
       user.posts.map(
-        async (val) => await User.findById(val.userId).then((val) => val)
+        async (val) =>
+          await User.findById(val.userId)
+            .select("-password")
+            .then((val) => val)
       )
     );
     for (let i = 0; i < arrUser.length; i++) {
