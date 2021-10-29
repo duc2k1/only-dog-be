@@ -5,8 +5,8 @@ const router = express.Router();
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 //--------------------------------------------------------------
-//use for dashboard user
-router.get("/dashboard/:userId", async (req, res) => {
+//use for dashboard userId
+router.get("/get_dashboard_user_id/:userId", async (req, res) => {
   try {
     //-------------------------------------------------------------
     const { userId } = req.params;

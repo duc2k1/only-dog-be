@@ -1,9 +1,9 @@
 ### Bearer accessToken
 PUT http://localhost:5500/posts/like
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTc5NmE0MmE0N2EyZjBjYmEzNGE3ZjIiLCJpYXQiOjE2MzUzNDgxMDF9.yPgEEZtmrg_UDsrz1jfzcqXa4SSqfrYPuiEL43t8PpM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTdiNGEwNjhhNDMwNjczODQ5MzJlMzAiLCJpYXQiOjE2MzU1MDc0MTB9.bSVsGV5rGkXgOTbr6rI2b00gDeDCvNSkqqToG4NSw6c
 
 {
-  "userId":"61796a42a47a2f0cba34a7f2",
-  "postId":"617973cca4b2139a6f48c9d8"
+  "userId":"617b4a068a43067384932e30",
+  "postId":"617b4db88a43067384932e77"
 }
