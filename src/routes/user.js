@@ -10,31 +10,23 @@ router.get("/get_dashboard_user_id/:userId", async (req, res) => {
   try {
     //-------------------------------------------------------------
     const { userId } = req.params;
-    if (!userId) {
-      res.status(404).json({ success: false, message: "Not found userId" });
-      return;
-    }
+    if (!userId)
+      return res
+        .status(404)
+        .json({ success: false, message: "Not found userId" });
     const user = await User.findById(userId).select("-password");
-    if (!user) {
-      res.status(404).json({ success: false, message: "Not found user" });
-      return;
-    }
+    if (!user)
+      return res
+        .status(404)
+        .json({ success: false, message: "Not found user" });
     //------------------------------------------------------------
-    user.posts = await Post.find().where("userId").in(user.followings);
-    const arrUser = await Promise.all(
-      user.posts.map(
-        async (val) =>
-          await User.findById(val.userId)
-            .select("-password")
-            .then((val) => val)
-      )
-    );
-    for (let i = 0; i < arrUser.length; i++) {
-      user.posts[i].userOb = arrUser[i];
-    }
-    res.status(200).json({ success: true, posts: user.posts });
+    const posts = await Post.find().where("userId").in(user.followings);
+    const users = await User.find();
+    return res.status(200).json({ success: true, posts, users });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 });
 //--------------------------------------------------------------
@@ -44,42 +36,42 @@ router.put("/follow_and_unfollow", verifyAccessToken, async (req, res) => {
   try {
     const { userIdFollow, userIdBeFollow } = req.body;
     const accessToken = req.headers.authorization.split(" ")[1];
-    if (userIdFollow !== jwt.decode(accessToken).userId) {
-      res.status(403).json({
+    if (userIdFollow !== jwt.decode(accessToken).userId)
+      return res.status(403).json({
         success: false,
         message: "Invalid userId",
       });
-      return;
-    }
-    if (!userIdFollow || !userIdBeFollow) {
-      res.status(404).json({
+    if (!userIdFollow || !userIdBeFollow)
+      return res.status(404).json({
         success: false,
         message: "Not have userIdFollow and/or userIdBeFollow",
       });
-      return;
-    }
-    if (userIdFollow === userIdBeFollow) {
-      res.status(403).json({
+    if (userIdFollow === userIdBeFollow)
+      return res.status(403).json({
         success: false,
         message: "You can't follow yourself",
       });
-      return;
-    }
     const yourSelf = await User.findById(userIdFollow);
     const userBeFollow = await User.findById(userIdBeFollow);
     if (!yourSelf.followings.includes(userIdBeFollow)) {
       //follow
       await yourSelf.updateOne({ $push: { followings: userIdBeFollow } }); //yourself
       await userBeFollow.updateOne({ $push: { followers: userIdFollow } }); //other user
-      res.status(200).json({ success: true, message: "User was followed" });
+      return res
+        .status(200)
+        .json({ success: true, message: "User was followed" });
     } else {
       //unfollow
       await yourSelf.updateOne({ $pull: { followings: userIdBeFollow } }); //yourself
       await userBeFollow.updateOne({ $pull: { followers: userIdFollow } }); //other user
-      res.status(200).json({ success: true, message: "User was unfollowed" });
+      return res
+        .status(200)
+        .json({ success: true, message: "User was unfollowed" });
     }
   } catch (err) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 });
 //--------------------------------------------------------------
@@ -87,16 +79,18 @@ router.put("/follow_and_unfollow", verifyAccessToken, async (req, res) => {
 router.get("/find_by_name/:userName", async (req, res) => {
   try {
     const { userName } = req.params; //get from body
-    if (!userName) {
-      res.status(404).json({ success: false, message: "Not found user" });
-      return;
-    }
+    if (!userName)
+      return res
+        .status(404)
+        .json({ success: false, message: "Not found user" });
     const users = await User.find({
       userName: { $regex: userName, $options: "i" },
     }).select("-password");
-    res.json({ success: true, users });
+    return res.json({ success: true, users });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 });
 //--------------------------------------------------------------
@@ -104,29 +98,32 @@ router.get("/find_by_name/:userName", async (req, res) => {
 router.get("/find_by_id/:userId", async (req, res) => {
   try {
     const { userId } = req.params; //get from body
-    if (!userId) {
-      res.status(404).json({ success: false, message: "Not found userId" });
-      return;
-    }
+    if (!userId)
+      return res
+        .status(404)
+        .json({ success: false, message: "Not found userId" });
     const user = await User.findById(userId).select("-password");
-    if (!user) {
-      res.status(404).json({ success: false, message: "Not found user" });
-      return;
-    }
+    if (!user)
+      return res
+        .status(404)
+        .json({ success: false, message: "Not found user" });
     user.posts = await Post.find().where("_id").in(user.posts);
-    res.json({ success: true, user });
+    return res.json({ success: true, user });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 });
 //--------------------------------------------------------------
 router.get("/get_all", async (req, res) => {
   try {
-    const users = await User.find({}).select("-password");
-    res.json({ success: true, users });
+    const users = await User.find().select("-password");
+    return res.json({ success: true, users });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 });
 //--------------------------------------------------------------

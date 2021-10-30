@@ -34,8 +34,5 @@ app.use("/auth", authRouter);
 app.use("/posts", postRouter);
 app.use("/users", userRouter);
 app.use("/images", express.static(__dirname + "/src/images"));
-app.use("/", (req, res) => {
-  res.status(200).json({ success: true, message: "Welcome to my website API" });
-});
 //--------------------------------------------------------------
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

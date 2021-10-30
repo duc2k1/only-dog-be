@@ -27,11 +27,13 @@ router.delete("/remove_all_refresh_token", (req, res) => {
         redisClient.set(key, JSON.stringify([]));
       }
     });
-    res
+    return res
       .status(200)
       .json({ success: true, message: "Remove all refresh token success" });
   } catch (err) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 });
 //--------------------------------------------------------------
@@ -48,51 +50,55 @@ router.delete("/remove_refresh_token", (req, res) => {
         redisClient.set(key, JSON.stringify(refreshTokens));
       }
     });
-    res
+    return res
       .status(200)
       .json({ success: true, message: "Remove refresh token success" });
   } catch (err) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 });
 //--------------------------------------------------------------
 router.put("/refresh_access_token", (req, res) => {
-  const refreshToken = req.headers.authorization.split(" ")[1];
-  if (!refreshToken) {
-    res.status(401).json({ success: false, message: "Unauthorized" });
-    return;
+  try {
+    const refreshToken = req.headers.authorization.split(" ")[1];
+    if (!refreshToken)
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    if (!refreshTokens.includes(refreshToken))
+      return res
+        .status(403)
+        .json({ success: false, message: "Invalid Refresh Token" });
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, data) => {
+      if (err)
+        return res.status(403).json({ success: false, message: "Forbidden" });
+      const accessToken = jwt.sign(
+        { userName: data.userName },
+        process.env.ACCESS_TOKEN_SECRET
+        // {
+        //   expiresIn: "30s",
+        // }
+      );
+      return res.status(200).json({ success: true, accessToken });
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
-  if (!refreshTokens.includes(refreshToken)) {
-    res.status(403).json({ success: false, message: "Invalid Refresh Token" });
-    return;
-  }
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, data) => {
-    if (err) {
-      res.status(403).json({ success: false, message: "Forbidden" });
-      return;
-    }
-    const accessToken = jwt.sign(
-      { userName: data.userName },
-      process.env.ACCESS_TOKEN_SECRET
-      // {
-      //   expiresIn: "30s",
-      // }
-    );
-    res.status(200).json({ success: true, accessToken });
-  });
 });
 router.post("/register", async (req, res) => {
-  const { userName, email, password } = req.body;
-  if (
-    !validateUserName(userName) ||
-    !validateEmail(email) ||
-    !validatePassword(password)
-  )
-    return res.status(400).json({
-      success: false,
-      message: "Error with User Name and/or Password",
-    });
   try {
+    const { userName, email, password } = req.body;
+    if (
+      !validateUserName(userName) ||
+      !validateEmail(email) ||
+      !validatePassword(password)
+    )
+      return res.status(400).json({
+        success: false,
+        message: "Error with User Name and/or Password",
+      });
     const userOrEmail = await User.findOne({ $or: [{ userName }, { email }] });
     if (userOrEmail)
       return res
@@ -126,18 +132,20 @@ router.post("/register", async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 });
 //--------------------------------------------------------------
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  if (!validateEmail(email) || !validatePassword(password))
-    return res.status(400).json({
-      success: false,
-      message: "Error with email and/or password",
-    });
   try {
+    const { email, password } = req.body;
+    if (!validateEmail(email) || !validatePassword(password))
+      return res.status(400).json({
+        success: false,
+        message: "Error with email and/or password",
+      });
     const user = await User.findOne({ email });
     if (!user)
       return res
@@ -174,8 +182,9 @@ router.post("/login", async (req, res) => {
       }
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 });
 //--------------------------------------------------------------
