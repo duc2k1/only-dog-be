@@ -5,8 +5,8 @@ const router = express.Router();
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 //--------------------------------------------------------------
-//use for dashboard userId
-router.get("/get_dashboard_user_id/:userId", async (req, res) => {
+// get userId's dashboard
+router.get("/dashboard/:userId", async (req, res) => {
   try {
     //-------------------------------------------------------------
     const { userId } = req.params;
@@ -32,6 +32,7 @@ router.get("/get_dashboard_user_id/:userId", async (req, res) => {
     for (let i = 0; i < arrUser.length; i++) {
       user.posts[i].userOb = arrUser[i];
     }
+    console.log(user.posts);
     res.status(200).json({ success: true, posts: user.posts });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
@@ -88,13 +89,18 @@ router.get("/find_by_name/:userName", async (req, res) => {
   try {
     const { userName } = req.params; //get from body
     if (!userName) {
-      res.status(404).json({ success: false, message: "Not found user" });
+      res.status(404).json({ success: false, message: "User not found" });
       return;
     }
     const users = await User.find({
       userName: { $regex: userName, $options: "i" },
     }).select("-password");
-    res.json({ success: true, users });
+
+    if (users.length === 0) {
+      res.json({ success: false, message: "User not found" });
+    } else {
+      res.json({ success: true, users });
+    }
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
@@ -120,7 +126,7 @@ router.get("/find_by_id/:userId", async (req, res) => {
   }
 });
 //--------------------------------------------------------------
-router.get("/get_all", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const users = await User.find({}).select("-password");
     res.json({ success: true, users });

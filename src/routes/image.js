@@ -25,11 +25,8 @@ router.get("/", async (req, res) => {
   }
 });
 //--------------------------------------------------------------
-router.post("/add-post",upload.single("pathImage"), async (req, res) => {
-  const {
-    userId,
-    pathImage,
-  } = req.body;
+router.post("/add-post", upload.single("pathImage"), async (req, res) => {
+  const { userId, pathImage } = req.body;
   try {
     const newPost = new Post({
       userId,
@@ -60,34 +57,32 @@ router.post(
 );
 //--------------------------------------------------------------
 router.put("/:id/like", verifyToken, async (req, res) => {
-  try{
+  try {
     const post = await Post.findById(req.params.id);
-  
-    if(!post.likes.includes(req.body.userId))
-    {
-      await post.updateOne({$push:{likes:req.body.userId}});
+
+    if (!post.likes.includes(req.body.userId)) {
+      await post.updateOne({ $push: { likes: req.body.userId } });
       res.status(200).json("The post was liked");
-    }else{
-      await post.updateOne({$pull:{likes:req.body.userId}});
+    } else {
+      await post.updateOne({ $pull: { likes: req.body.userId } });
       res.status(200).json("The post was unliked");
     }
-  }catch (err){
+  } catch (err) {
     res.status(500).json(err);
   }
 });
 //--------------------------------------------------------------
 router.put("/:id/dislike", verifyToken, async (req, res) => {
-  try{
+  try {
     const post = await Post.findById(req.params.id);
-    if(!post.dislikes.includes(req.body.userId))
-    {
-      await post.updateOne({$push:{dislikes:req.body.userId}});
+    if (!post.dislikes.includes(req.body.userId)) {
+      await post.updateOne({ $push: { dislikes: req.body.userId } });
       res.status(200).json("The post was disliked");
-    }else{
-      await post.updateOne({$pull:{dislikes:req.body.userId}});
+    } else {
+      await post.updateOne({ $pull: { dislikes: req.body.userId } });
       res.status(200).json("The post was undisliked");
     }
-  }catch (err){
+  } catch (err) {
     res.status(500).json(err);
   }
 });

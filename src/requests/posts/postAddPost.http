@@ -1,5 +1,5 @@
 ### Bearer accessToken
 ### Inprogress dev
-POST http://localhost:5500/posts/add/617b4a158a43067384932e33
+POST http://localhost:5500/posts/add/617cb8d0bacf2a394e8fe4c3
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTdiNGExNThhNDMwNjczODQ5MzJlMzMiLCJpYXQiOjE2MzU0NzAwMDF9.6tRf_WdYScijVAwE77kyutKoDCGeGe3hjLGmsbABK8Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTdjYjhkMGJhY2YyYTM5NGU4ZmU0YzMiLCJpYXQiOjE2MzU1NjQwNTV9.e5yMZgK2Kd4jj90IxT6qG7-rc3X3y2VGPzkcey7jTlU

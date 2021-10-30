@@ -75,7 +75,7 @@ router.put("/refresh_access_token", (req, res) => {
       { userName: data.userName },
       process.env.ACCESS_TOKEN_SECRET
       // {
-      //   expiresIn: "30s",
+      //   expiresIn: "30m",
       // }
     );
     res.status(200).json({ success: true, accessToken });
@@ -103,13 +103,13 @@ router.post("/register", async (req, res) => {
     await newUser.save();
     const accessToken = jwt.sign(
       { userId: newUser._id },
-      process.env.ACCESS_TOKEN_SECRET
-      // { expiresIn: "30s" }
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "30m" }
     );
     const refreshToken = jwt.sign(
       { userId: newUser._id },
-      process.env.REFRESH_TOKEN_SECRET
-      // { expiresIn: "30s" }
+      process.env.REFRESH_TOKEN_SECRET,
+      { expiresIn: "7d" }
     );
     res.json({
       success: true,
@@ -150,13 +150,13 @@ router.post("/login", async (req, res) => {
         .json({ success: false, message: "Incorrect password" });
     const accessToken = jwt.sign(
       { userId: user._id },
-      process.env.ACCESS_TOKEN_SECRET
-      // { expiresIn: "30s" }
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "30m" }
     );
     const refreshToken = jwt.sign(
       { userId: user._id },
-      process.env.REFRESH_TOKEN_SECRET
-      // { expiresIn: "7d" }
+      process.env.REFRESH_TOKEN_SECRET,
+      { expiresIn: "7d" }
     );
     refreshTokens.push(refreshToken);
     res.json({
