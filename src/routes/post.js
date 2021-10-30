@@ -148,8 +148,9 @@ router.put("/dislike", verifyAccessToken, async (req, res) => {
 //--------------------------------------------------------------
 router.get("/get_all", async (req, res) => {
   try {
-    const posts = await Post.find({});
-    return res.status(200).json({ success: true, posts });
+    const posts = await Post.find();
+    const users = await User.find();
+    return res.status(200).json({ success: true, posts, users });
   } catch (error) {
     return res
       .status(500)
