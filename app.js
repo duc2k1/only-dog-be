@@ -15,7 +15,7 @@ const __dirname = path.resolve();
 //--------------------------------------------------------------
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.DB_URL, {
+    await mongoose.connect("mongodb+srv://thienaka2p:0987850041Vinh%40%4013@cluster0.ezwob.mongodb.net/only-dog-db?retryWrites=true&w=majority", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
