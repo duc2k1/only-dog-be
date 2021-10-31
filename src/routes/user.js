@@ -1,12 +1,62 @@
 import express from "express";
+import multer from "multer";
 import verifyAccessToken from "../middlewares/verifyAccessToken.js";
 import Post from "../models/Post.js";
 const router = express.Router();
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 //--------------------------------------------------------------
-// get userId's dashboard
-router.get("/dashboard/:userId", async (req, res) => {
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "src/images/");
+  },
+  filename: function (req, file, cb) {
+    file.originalname = file.originalname.trim().replace(/ /g, "-");
+    cb(null, req.params.userId + file.originalname);
+  },
+});
+const upload = multer({ storage: storage });
+//--------------------------------------------------------------
+router.post(
+  "/change_avatar_user/:userId",
+  verifyAccessToken,
+  upload.single("avatar"),
+  async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const file = req.file;
+      if (!userId)
+        return res
+          .status(404)
+          .json({ success: false, message: "Not found userId" });
+      if (!file)
+        return res
+          .status(404)
+          .json({ success: false, message: "Not found file" });
+      let user = await User.findById(userId);
+      if (!user)
+        return res
+          .status(404)
+          .json({ success: false, message: "Not found user" });
+      //----------------------------------------
+      file.originalname = file.originalname.trim().replace(/ /g, "-");
+      const pathAvatar = "/images/" + req.params.userId + file.originalname;
+      res.status(200).json({ success: true, pathAvatar });
+      await user.updateOne({
+        $set: {
+          pathAvatar: pathAvatar,
+        },
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
+    }
+  }
+);
+//-------------------------------------------------------------
+//use for dashboard userId
+router.get("/get_dashboard_user_id/:userId", async (req, res) => {
   try {
     //-------------------------------------------------------------
     const { userId } = req.params;
@@ -89,12 +139,7 @@ router.get("/find_by_name/:userName", async (req, res) => {
     const users = await User.find({
       userName: { $regex: userName, $options: "i" },
     }).select("-password");
-
-    if (users.length === 0) {
-      res.json({ success: false, message: "User not found" });
-    } else {
-      res.json({ success: true, users });
-    }
+    res.json({ success: true, users });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
@@ -121,7 +166,7 @@ router.get("/find_by_id/:userId", async (req, res) => {
   }
 });
 //--------------------------------------------------------------
-router.get("/", async (req, res) => {
+router.get("/get_all", async (req, res) => {
   try {
     const users = await User.find().select("-password");
     res.json({ success: true, users });

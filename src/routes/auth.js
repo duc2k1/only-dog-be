@@ -103,13 +103,13 @@ router.post("/register", async (req, res) => {
     const newUser = new User({ userName, email, password: hashedPassword });
     const accessToken = jwt.sign(
       { userId: newUser._id },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "30m" }
+      process.env.ACCESS_TOKEN_SECRET
+      // { expiresIn: "30s" }
     );
     const refreshToken = jwt.sign(
       { userId: newUser._id },
-      process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "7d" }
+      process.env.REFRESH_TOKEN_SECRET
+      // { expiresIn: "30s" }
     );
     res.json({
       success: true,
@@ -154,13 +154,13 @@ router.post("/login", async (req, res) => {
     //-------------------------------------------
     const accessToken = jwt.sign(
       { userId: user._id },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "30m" }
+      process.env.ACCESS_TOKEN_SECRET
+      // { expiresIn: "30s" }
     );
     const refreshToken = jwt.sign(
       { userId: user._id },
-      process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "7d" }
+      process.env.REFRESH_TOKEN_SECRET
+      // { expiresIn: "7d" }
     );
     refreshTokens.push(refreshToken);
     res.json({

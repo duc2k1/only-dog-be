@@ -1,2 +1,2 @@
 ###
-GET http://localhost:5500/users
+GET http://localhost:5500/users/get_all

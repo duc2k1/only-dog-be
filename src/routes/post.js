@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 //--------------------------------------------------------------
 const router = express.Router();
 //--------------------------------------------------------------
-const storagePostImage = multer.diskStorage({
+const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "src/images/posts/");
   },
@@ -16,7 +16,7 @@ const storagePostImage = multer.diskStorage({
     cb(null, req.params.userId + file.originalname);
   },
 });
-const upload = multer({ storage: storagePostImage });
+const upload = multer({ storage: storage });
 //--------------------------------------------------------------
 router.post(
   "/add_image_post/:userId",
@@ -159,7 +159,7 @@ router.put("/dislike", verifyAccessToken, async (req, res) => {
   }
 });
 //--------------------------------------------------------------
-router.get("/", async (req, res) => {
+router.get("/get_all", async (req, res) => {
   try {
     const posts = await Post.find();
     const users = await User.find();
