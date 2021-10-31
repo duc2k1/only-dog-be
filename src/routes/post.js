@@ -41,8 +41,7 @@ router.post(
           .json({ success: false, message: "Not found user" });
       //----------------------------------------
       file.originalname = file.originalname.trim().replace(/ /g, "-");
-      const pathImage =
-        "/images/posts/" + req.params.userId + file.originalname;
+      const pathImage = "/images/" + req.params.userId + file.originalname;
       const post = await Post({
         userId,
         pathImage,
