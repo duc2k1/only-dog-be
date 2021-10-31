@@ -7,7 +7,6 @@
   "scripts": {
     "preinstall": "npx only-allow yarn",
     "dev": "nodemon app",
-    "deploy": "git push heroku",
     "product": "node app"
   },
   "author": "",
@@ -22,8 +21,7 @@
     "mongoose": "^6.0.12",
     "multer": "^1.4.3",
     "path": "^0.12.7",
-    "redis": "^3.1.2",
-    "sharp": "^0.29.2"
+    "redis": "^3.1.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.14"
