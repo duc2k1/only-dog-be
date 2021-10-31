@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import helmet from "helmet";
+import dotenv from "dotenv";
 import authRouter from "./src/routes/auth.js";
 import postRouter from "./src/routes/post.js";
 import userRouter from "./src/routes/user.js";
@@ -9,7 +10,7 @@ import path from "path";
 //--------------------------------------------------------------
 const app = express();
 const PORT = process.env.PORT || 5500;
-require("dotenv").config();
+dotenv.config();
 const __dirname = path.resolve();
 //--------------------------------------------------------------
 const connectDB = async () => {

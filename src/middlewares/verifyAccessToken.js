@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 //--------------------------------------------------------------
-require("dotenv").config();
+dotenv.config();
 //--------------------------------------------------------------
 export default function verifyAccessToken(req, res, next) {
   const accessToken = req.headers.authorization.split(" ")[1];
