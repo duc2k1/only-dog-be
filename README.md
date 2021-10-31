@@ -10,117 +10,120 @@ yarn
 yarn dev
 ```
 
-
 ## Rest API
 
 > ## Authentication
 
-### Login 
-`POST /login`
-
+### Login
+`POST `
 ```
-https://app-only-dog.herokuapp.com/auth/login
-```
-
-### Register 
-`POST /register`
-```
-https://app-only-dog.herokuapp.com/auth/register
+POST /auth/login
 ```
 
-### Refresh access token 
-`PUT /refresh_access_token`
+### Register
+`POST `
 ```
-https://app-only-dog.herokuapp.com/auth/refresh_access_token
+POST/auth/register
 ```
 
-### remove refresh token 
-`DELETE /remove_refresh_token`
+### Refresh access token
+`PUT `
 ```
-https://app-only-dog.herokuapp.com/auth/remove_refresh_token
+PUT /auth/refresh_access_token
+```
+
+### remove refresh token
+`DELETE `
+```
+DELETE /auth/remove_refresh_token
 ```
 
 ### Logout
-`DELETE /remove_all_refresh_token`
+`DELETE `
 ```
-https://app-only-dog.herokuapp.com/auth/remove_all_refresh_token
+/auth/remove_all_refresh_token
 ```
 
 > ## Model Users
 
 ### Get list user
 
-`GET /users/`
+`GET `
 
 ```
-https://app-only-dog.herokuapp.com/users
+/users
+```
+
+### Update Avatar User
+
+`PUT `
+
+```
+/users/change_avatar_user
 ```
 
 ### Get userId's dashboard
 
-`GET /dashboard/:userId`
+`GET `
 
 ```
-https://app-only-dog.herokuapp.com/users/dashboard/:userId
+/posts/get_dashboard_user_id
 ```
 
 ### Find user by userName
 
-`GET /find_by_name/:userName`
+`GET `
 
 ```
-https://app-only-dog.herokuapp.com/users/find_by_name/:userName
+/users/find_by_name/:userName
 ```
 
 ### Get profile user
 
-`GET /find_by_id/:userId`
+`GET `
 
 ```
-https://app-only-dog.herokuapp.com/users/find_by_id/:userId
+/users/find_by_id/:userId
 ```
 
 ### Follow or Unfollow another user
 
-`PUT /follow_and_unfollow`
+`PUT`
 
 ```
-https://app-only-dog.herokuapp.com/users/follow_and_unfollow
+/users/follow_and_unfollow
 ```
 
 > ## Model Posts
 
 ### Get list post
 
-`GET /posts/`
+`GET`
 
 ```
-https://app-only-dog.herokuapp.com/posts
+/posts
 ```
+
 ### Create new post
 
-`POST /add/:userId`
+`POST`
 
 ```
-https://app-only-dog.herokuapp.com/posts/add/:userId
+/posts/add/add_image_post
 ```
 
-### Like or Unlike one post 
+### Like or Unlike one post
 
-`PUT /like`
+`PUT`
 
 ```
-https://app-only-dog.herokuapp.com/posts/like
+/posts/like
 ```
-
 
 ### Dislike or undislike one post
 
-`PUT /dislike`
+`PUT`
 
 ```
-https://app-only-dog.herokuapp.com/posts/dislike
+/posts/dislike
 ```
-
-
-
