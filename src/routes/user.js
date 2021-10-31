@@ -20,9 +20,10 @@ router.get("/get_dashboard_user_id/:userId", async (req, res) => {
         .status(404)
         .json({ success: false, message: "Not found user" });
     //------------------------------------------------------------
-    const posts = await Post.find().where("userId").in(user.followings);
+    const allPostOfUser = await Post.find().where("userId").in(user.followings);
+    const allPost = await Post.find().then((val) => val.concat(allPostOfUser));
     const users = await User.find();
-    return res.status(200).json({ success: true, posts, users });
+    return res.status(200).json({ success: true, posts: allPost, users });
   } catch (error) {
     return res
       .status(500)
