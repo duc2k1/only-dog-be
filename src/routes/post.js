@@ -39,21 +39,20 @@ router.post(
         return res
           .status(404)
           .json({ success: false, message: "Not found user" });
-      const userOb = {};
+      //----------------------------------------
       file.originalname = file.originalname.trim().replace(/ /g, "-");
       const post = await Post({
         userId,
-        userOb,
         pathImage: "/images/posts/" + req.params.userId + file.originalname,
       }).save();
       if (!post)
         return res
           .status(500)
-          .json({ success: false, message: "can not create post" });
+          .json({ success: false, message: "Can not create post" });
+      res.status(200).json({ success: true, post });
       await user.updateOne({ $push: { posts: post._id.toString() } });
-      return res.status(200).json({ success: true, post });
     } catch (error) {
-      return res
+      res
         .status(500)
         .json({ success: false, message: "Internal server error" });
     }
@@ -62,6 +61,7 @@ router.post(
 //--------------------------------------------------------------
 router.put("/like", verifyAccessToken, async (req, res) => {
   try {
+    //--validate all
     const { userId, postId } = req.body;
     const accessToken = req.headers.authorization.split(" ")[1];
     if (!userId || !postId)
@@ -75,36 +75,43 @@ router.put("/like", verifyAccessToken, async (req, res) => {
         message: "Invalid userId",
       });
     const post = await Post.findById(postId);
+    if (!post)
+      return res.status(404).json({
+        success: false,
+        message: "Not found post",
+      });
+    //---------------------------------------------
     if (!post.likes.includes(userId)) {
-      await post.updateOne({ $push: { likes: userId } });
       //check user da disliked trc do chua, neu r thi undisliked
       if (post.dislikes.includes(userId)) {
-        await post.updateOne({ $pull: { dislikes: userId } });
-        return res.status(200).json({
+        res.status(200).json({
           success: true,
-          message: userId + " liked and undisliked post " + postId,
+          message: "liked and undisliked",
         });
+        await post.updateOne({ $push: { likes: userId } });
+        await post.updateOne({ $pull: { dislikes: userId } });
+      } else {
+        res.status(200).json({
+          success: true,
+          message: "liked",
+        });
+        await post.updateOne({ $push: { likes: userId } });
       }
-      return res.status(200).json({
-        success: true,
-        message: userId + " liked post " + postId,
-      });
     } else {
-      await post.updateOne({ $pull: { likes: userId } });
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
-        message: userId + " unliked post " + postId,
+        message: "unliked",
       });
+      await post.updateOne({ $pull: { likes: userId } });
     }
   } catch (err) {
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal Server Error" });
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 });
 //--------------------------------------------------------------
 router.put("/dislike", verifyAccessToken, async (req, res) => {
   try {
+    //--validate all
     const { userId, postId } = req.body;
     const accessToken = req.headers.authorization.split(" ")[1];
     if (!userId || !postId)
@@ -118,31 +125,37 @@ router.put("/dislike", verifyAccessToken, async (req, res) => {
         message: "Invalid userId",
       });
     const post = await Post.findById(postId);
+    if (!post)
+      return res.status(404).json({
+        success: false,
+        message: "Not found post",
+      });
+    //---------------------------------------------
     if (!post.dislikes.includes(userId)) {
-      await post.updateOne({ $push: { dislikes: userId } });
       //check user da liked trc do chua, neu r thi unliked
       if (post.likes.includes(userId)) {
-        await post.updateOne({ $pull: { likes: userId } });
-        return res.status(200).json({
+        res.status(200).json({
           success: true,
-          message: userId + " disliked and unliked post " + postId,
+          message: "disliked and unliked",
         });
+        await post.updateOne({ $push: { dislikes: userId } });
+        await post.updateOne({ $pull: { likes: userId } });
+      } else {
+        res.status(200).json({
+          success: true,
+          message: "disliked",
+        });
+        await post.updateOne({ $push: { dislikes: userId } });
       }
-      return res.status(200).json({
-        success: true,
-        message: userId + " disliked post " + postId,
-      });
     } else {
-      await post.updateOne({ $pull: { dislikes: userId } });
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
-        message: userId + " undisliked post " + postId,
+        message: "undisliked",
       });
+      await post.updateOne({ $pull: { dislikes: userId } });
     }
   } catch (err) {
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal Server Error" });
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 });
 //--------------------------------------------------------------
@@ -150,20 +163,18 @@ router.get("/get_all", async (req, res) => {
   try {
     const posts = await Post.find();
     const users = await User.find();
-    return res.status(200).json({ success: true, posts, users });
+    res.status(200).json({ success: true, posts, users });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
 //--------------------------------------------------------------
-router.post("/upload", upload.single("avatar"), async (req, res, next) => {
+router.post("/upload", upload.single("avatar"), async (req, res) => {
   const image = req.file;
   if (!image) {
     return res.status(404).json({ success: false, message: "Not found image" });
   }
-  return res.send(image);
+  res.send(image);
 });
 //--------------------------------------------------------------
 export default router;

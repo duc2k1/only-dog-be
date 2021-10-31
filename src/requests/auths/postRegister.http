@@ -3,6 +3,15 @@ POST http://localhost:5500/auth/register
 Content-Type: application/json
 
 {
+  "userName": "ducd",
+  "email":"ducd@mail.com",
+  "password": "duc622"
+}
+###
+POST http://localhost:5500/auth/register
+Content-Type: application/json
+
+{
   "userName": "duc1",
   "email":"duc1@mail.com",
   "password": "duc111"

@@ -7,7 +7,6 @@
   "scripts": {
     "preinstall": "npx only-allow yarn",
     "dev": "nodemon app",
-    "deploy": "git push heroku",
     "product": "node app"
   },
   "author": "",

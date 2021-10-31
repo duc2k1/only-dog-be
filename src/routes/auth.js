@@ -21,25 +21,26 @@ const key = "refreshToken";
 //--------------------------------------------------------------
 router.delete("/remove_all_refresh_token", (req, res) => {
   try {
+    res
+      .status(200)
+      .json({ success: true, message: "Remove all refresh token success" });
     redisClient.get(key, (err, data) => {
       if (err) return;
       if (data) {
         redisClient.set(key, JSON.stringify([]));
       }
     });
-    return res
-      .status(200)
-      .json({ success: true, message: "Remove all refresh token success" });
   } catch (err) {
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
 //--------------------------------------------------------------
 router.delete("/remove_refresh_token", (req, res) => {
   try {
     const refreshToken = req.headers.authorization.split(" ")[1];
+    res
+      .status(200)
+      .json({ success: true, message: "Remove refresh token success" });
     redisClient.get(key, (err, data) => {
       if (err) return;
       if (data) {
@@ -50,13 +51,8 @@ router.delete("/remove_refresh_token", (req, res) => {
         redisClient.set(key, JSON.stringify(refreshTokens));
       }
     });
-    return res
-      .status(200)
-      .json({ success: true, message: "Remove refresh token success" });
   } catch (err) {
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
 //--------------------------------------------------------------
@@ -79,12 +75,10 @@ router.put("/refresh_access_token", (req, res) => {
         //   expiresIn: "30s",
         // }
       );
-      return res.status(200).json({ success: true, accessToken });
+      res.status(200).json({ success: true, accessToken });
     });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
 router.post("/register", async (req, res) => {
@@ -97,16 +91,16 @@ router.post("/register", async (req, res) => {
     )
       return res.status(400).json({
         success: false,
-        message: "Error with User Name and/or Password",
+        message: "Invalid User Name and/or Password",
       });
     const userOrEmail = await User.findOne({ $or: [{ userName }, { email }] });
     if (userOrEmail)
       return res
         .status(400)
         .json({ success: false, message: "User Name or Email already taken" });
+    //---------------------------------
     const hashedPassword = bcrypt.hashSync(password, saltRounds);
     const newUser = new User({ userName, email, password: hashedPassword });
-    await newUser.save();
     const accessToken = jwt.sign(
       { userId: newUser._id },
       process.env.ACCESS_TOKEN_SECRET
@@ -131,6 +125,7 @@ router.post("/register", async (req, res) => {
         redisClient.set(key, JSON.stringify(refreshTokens));
       }
     });
+    await newUser.save();
   } catch (error) {
     return res
       .status(500)
@@ -144,7 +139,7 @@ router.post("/login", async (req, res) => {
     if (!validateEmail(email) || !validatePassword(password))
       return res.status(400).json({
         success: false,
-        message: "Error with email and/or password",
+        message: "Invalid email and/or password",
       });
     const user = await User.findOne({ email });
     if (!user)
@@ -156,6 +151,7 @@ router.post("/login", async (req, res) => {
       return res
         .status(400)
         .json({ success: false, message: "Incorrect password" });
+    //-------------------------------------------
     const accessToken = jwt.sign(
       { userId: user._id },
       process.env.ACCESS_TOKEN_SECRET
@@ -182,9 +178,7 @@ router.post("/login", async (req, res) => {
       }
     });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
 //--------------------------------------------------------------

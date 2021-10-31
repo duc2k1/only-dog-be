@@ -7,10 +7,6 @@ const PostSchema = new Schema({
     type: String,
     required: true,
   },
-  userOb: {
-    type: Object,
-    default: {},
-  },
   pathImage: {
     type: String,
     default:
