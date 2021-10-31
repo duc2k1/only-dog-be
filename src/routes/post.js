@@ -9,7 +9,7 @@ const router = express.Router();
 //--------------------------------------------------------------
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "src/images/posts/");
+    cb(null, "src/images/");
   },
   filename: function (req, file, cb) {
     file.originalname = file.originalname.trim().replace(/ /g, "-");
@@ -41,17 +41,15 @@ router.post(
           .json({ success: false, message: "Not found user" });
       //----------------------------------------
       file.originalname = file.originalname.trim().replace(/ /g, "-");
+      const pathImage = "/images/" + req.params.userId + file.originalname;
       const post = await Post({
         userId,
-        pathImage: "/images/posts/" + req.params.userId + file.originalname,
+        pathImage,
       }).save();
-      if (!post)
-        return res
-          .status(500)
-          .json({ success: false, message: "Can not create post" });
-      res.status(200).json({ success: true, post });
+      res.status(200).json({ success: true, pathImage });
       await user.updateOne({ $push: { posts: post._id.toString() } });
     } catch (error) {
+      console.log("~ error", error);
       res
         .status(500)
         .json({ success: false, message: "Internal server error" });

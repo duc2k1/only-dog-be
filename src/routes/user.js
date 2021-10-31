@@ -33,18 +33,18 @@ router.post(
         return res
           .status(404)
           .json({ success: false, message: "Not found file" });
-      let user = await User.findById(userId);
+      const user = await User.findById(userId);
       if (!user)
         return res
           .status(404)
           .json({ success: false, message: "Not found user" });
       //----------------------------------------
       file.originalname = file.originalname.trim().replace(/ /g, "-");
-      const pathAvatar = "/images/" + req.params.userId + file.originalname;
-      res.status(200).json({ success: true, pathAvatar });
+      const pathImage = "/images/" + req.params.userId + file.originalname;
+      res.status(200).json({ success: true, pathImage });
       await user.updateOne({
         $set: {
-          pathAvatar: pathAvatar,
+          pathAvatar: pathImage,
         },
       });
     } catch (error) {
