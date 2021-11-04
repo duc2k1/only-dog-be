@@ -175,4 +175,46 @@ router.post("/upload", upload.single("avatar"), async (req, res) => {
   res.send(image);
 });
 //--------------------------------------------------------------
+router.delete("/delete", verifyAccessToken, async (req, res) => {
+   console.log(req.body);
+  try {
+    const { userId, postId } = req.body;
+    if (!userId) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+    if (!postId) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Post not found" });
+    }
+    console.log(postId);
+    const post = await Post.findById(postId);
+    console.log(post);
+    if (post.userId === req.body.userId) {
+      await post.deleteOne();
+      return res
+        .status(200)
+        .json({ success: true, message: "The post has been deleted" });
+    } else {
+      return res
+        .status(403)
+        .json({ success: false, message: "You can delete only your post" });
+    }
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+});
+
+router.get("/postss", async (req, res) => {
+  try {
+    const posts = await Post.find();
+    res.status(200).json({ success: true, posts });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
 export default router;
