@@ -12,6 +12,27 @@ const saltRounds = 10;
 const router = express.Router();
 dotenv.config();
 //--------------------------------------------------------------
+router.delete("/remove_refresh_token", (req, res) => {
+  try {
+    const refreshToken = req.headers.authorization.split(" ")[1];
+    res
+      .status(200)
+      .json({ success: true, message: "Remove refresh token success" });
+    redisClient.get(key, (err, data) => {
+      if (err) return;
+      if (data) {
+        refreshTokens = JSON.parse(data).filter(
+          (refToken) => refToken !== refreshToken
+        );
+        console.log("~ refreshTokens", refreshTokens);
+        redisClient.set(key, JSON.stringify(refreshTokens));
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+//--------------------------------------------------------------
 router.post("/register", async (req, res) => {
   const { userName, email, password } = req.body;
   // Simple validation
@@ -47,39 +68,50 @@ router.post("/register", async (req, res) => {
 });
 //--------------------------------------------------------------
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  if (!validateEmail(email) || !validatePassword(password))
-    return res.status(400).json({
-      success: false,
-      message: "Error with email and/or password",
-    });
   try {
+    const { email, password } = req.body;
+    if (!validateEmail(email) || !validatePassword(password))
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email and/or password",
+      });
     const user = await User.findOne({ email });
     if (!user)
-      return res.status(400).json({ success: false, message: "Not found" });
-    const passwordValid = bcrypt.compareSync(password, user.password); // true
+      return res
+        .status(400)
+        .json({ success: false, message: "Not found Email" });
+    const passwordValid = bcrypt.compareSync(password, user.password);
     if (!passwordValid)
       return res
         .status(400)
         .json({ success: false, message: "Incorrect password" });
+    //-------------------------------------------
     const accessToken = jwt.sign(
       { userId: user._id },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "30s" }
+      process.env.ACCESS_TOKEN_SECRET
+      // { expiresIn: "30s" }
     );
     const refreshToken = jwt.sign(
       { userId: user._id },
-      process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "30s" }
+      process.env.REFRESH_TOKEN_SECRET
+      // { expiresIn: "7d" }
     );
     refreshTokens.push(refreshToken);
     res.json({
       success: true,
-      refreshToken,
       accessToken,
+      refreshToken,
+    });
+    redisClient.get(key, (err, data) => {
+      if (err) return;
+      if (data) {
+        refreshTokens = JSON.parse(data);
+        refreshTokens.push(refreshToken);
+        console.log("~ refreshTokens", refreshTokens);
+        redisClient.set(key, JSON.stringify(refreshTokens));
+      }
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
