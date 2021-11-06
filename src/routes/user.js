@@ -25,6 +25,7 @@ router.post(
   async (req, res) => {
     try {
       const { userId } = req.params;
+      const { version } = req.body;
       const file = req.file;
       if (!userId)
         return res
@@ -39,15 +40,30 @@ router.post(
         return res
           .status(404)
           .json({ success: false, message: "Not found user" });
+      if (!version)
+        return res
+          .status(404)
+          .json({ success: false, message: "Not found version userid" });
       //----------------------------------------
       file.originalname = file.originalname.trim().replace(/ /g, "-");
       const pathImage = "/images/" + req.params.userId + file.originalname;
       res.status(200).json({ success: true, pathImage });
-      await user.updateOne({
-        $set: {
-          pathAvatar: pathImage,
-        },
-      });
+      if (user.version === version) {
+        try {
+          user.pathAvatar = pathImage;
+          await user.save();
+        } catch (error) {
+          return res.json({ success: false, message: "Optimistic!!!" });
+        }
+      } else {
+        return res.json({ success: false });
+      }
+
+      // await user.updateOne({
+      //   $set: {
+      //     pathAvatar: pathImage,
+      //   },
+      // });
     } catch (error) {
       res
         .status(500)

@@ -37,6 +37,6 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-});
+}, { optimisticConcurrency: true, versionKey: 'version' });
 //--------------------------------------------------------------
 export default mongoose.model("users", UserSchema);
