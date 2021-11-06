@@ -6,14 +6,16 @@ const router = express.Router();
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import validateUserName from "../validate/validateUserName.js";
-import  {nanoid}  from "nanoid";
+import { nanoid } from "nanoid";
 //--------------------------------------------------------------
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "src/images/");
   },
   filename: function (req, file, cb) {
-    cb(null, nanoid()+"."+file.mimetype.split('/')[1]);
+    const imageName = nanoid() + "." + file.mimetype.split("/")[1];
+    req.imageName = imageName;
+    cb(null, imageName);
   },
 });
 const upload = multer({ storage: storage });
@@ -45,8 +47,7 @@ router.post(
           .status(404)
           .json({ success: false, message: "Not found version userid" });
       //----------------------------------------
-      file.originalname = file.originalname.trim().replace(/ /g, "-");
-      const pathImage = "/images/" + req.params.userId + file.originalname;
+      const pathImage = "/images/" + req.imageName;
       res.status(200).json({ success: true, pathImage });
       if (user.version === version) {
         try {
