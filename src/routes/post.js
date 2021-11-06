@@ -9,11 +9,12 @@ const router = express.Router();
 //--------------------------------------------------------------
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "src/images/"+nanoid()+"."+file.mimetype.split('/')[1]);
+    cb(null, "src/images/" + nanoid() + "." + file.mimetype.split("/")[1]);
   },
   filename: function (req, file, cb) {
-    file.originalname = file.originalname.trim().replace(/ /g, "-");
-    cb(null, nanoid()+"."+file.mimetype.split('/')[1]);
+    const imageName = nanoid() + "." + file.mimetype.split("/")[1];
+    req.imageName = imageName;
+    cb(null, imageName);
   },
 });
 const upload = multer({ storage: storage });
@@ -40,8 +41,7 @@ router.post(
           .status(404)
           .json({ success: false, message: "Not found user" });
       //----------------------------------------
-      file.originalname = file.originalname.trim().replace(/ /g, "-");
-      const pathImage = "/images/" + req.params.userId + file.originalname;
+      const pathImage = "/images/" + req.imageName;
       const post = await Post({
         userId,
         pathImage,
