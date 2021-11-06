@@ -48,8 +48,7 @@ router.post(
           .status(404)
           .json({ success: false, message: "Not found version userid" });
       //----------------------------------------
-      file.originalname = file.originalname.trim().replace(/ /g, "-");
-      const pathImage = "/images/" + req.params.userId + file.originalname;
+      const pathImage = "/images/" + req.imageName;
       res.status(200).json({ success: true, pathImage });
       if (user.version === version) {
         try {
