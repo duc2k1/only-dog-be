@@ -6,14 +6,14 @@ const router = express.Router();
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import validateUserName from "../validate/validateUserName.js";
+import  {nanoid}  from "nanoid";
 //--------------------------------------------------------------
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "src/images/");
   },
   filename: function (req, file, cb) {
-    file.originalname = file.originalname.trim().replace(/ /g, "-");
-    cb(null, req.params.userId + file.originalname);
+    cb(null, nanoid()+"."+file.mimetype.split('/')[1]);
   },
 });
 const upload = multer({ storage: storage });
