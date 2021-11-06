@@ -4,12 +4,13 @@ import verifyAccessToken from "../middlewares/verifyAccessToken.js";
 import Post from "../models/Post.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
+import { nanoid } from "nanoid";
 //--------------------------------------------------------------
 const router = express.Router();
 //--------------------------------------------------------------
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "src/images/" + nanoid() + "." + file.mimetype.split("/")[1]);
+    cb(null, "src/images/");
   },
   filename: function (req, file, cb) {
     const imageName = nanoid() + "." + file.mimetype.split("/")[1];
