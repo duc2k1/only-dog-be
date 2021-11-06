@@ -29,6 +29,10 @@ router.post(
       const { userId } = req.params;
       const { version } = req.body;
       const file = req.file;
+      if (!version)
+        return res
+          .status(404)
+          .json({ success: false, message: "Not found version userid" });
       if (!userId)
         return res
           .status(404)
@@ -38,30 +42,25 @@ router.post(
           .status(404)
           .json({ success: false, message: "Not found file" });
       const user = await User.findById(userId);
-      const user2 = await User.findById(userId);
       if (!user)
         return res
           .status(404)
           .json({ success: false, message: "Not found user" });
-      if (!version)
-        return res
-          .status(404)
-          .json({ success: false, message: "Not found version userid" });
       //----------------------------------------
-      file.originalname = file.originalname.trim().replace(/ /g, "-");
-      const pathImage = "/images/" + req.params.userId + file.originalname;
-      res.status(200).json({ success: true, pathImage });
-      if (user.version === version) {
+      if (user.version !== +version) {
+        return res.json({ success: false, message: "Optimistic" });
+      } else {
+        const pathImage = "/images/" + req.imageName;
+        res.status(200).json({ success: true, pathImage });
         try {
           user.pathAvatar = pathImage;
           await user.save();
-          await user2.save();
         } catch (error) {
-          return res.json({ success: false, message: "Optimistic!!!" });
+          console.log(error);
+          return res.json({ success: false, message: "Optimistic" });
         }
-      } else {
-        return res.json({ success: false });
       }
+      //----------------------------------------
     } catch (error) {
       res
         .status(500)
