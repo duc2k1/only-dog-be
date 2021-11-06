@@ -38,6 +38,7 @@ router.post(
           .status(404)
           .json({ success: false, message: "Not found file" });
       const user = await User.findById(userId);
+      const user2 = await User.findById(userId);
       if (!user)
         return res
           .status(404)
@@ -47,24 +48,20 @@ router.post(
           .status(404)
           .json({ success: false, message: "Not found version userid" });
       //----------------------------------------
-      const pathImage = "/images/" + req.imageName;
+      file.originalname = file.originalname.trim().replace(/ /g, "-");
+      const pathImage = "/images/" + req.params.userId + file.originalname;
       res.status(200).json({ success: true, pathImage });
       if (user.version === version) {
         try {
           user.pathAvatar = pathImage;
           await user.save();
+          await user2.save();
         } catch (error) {
           return res.json({ success: false, message: "Optimistic!!!" });
         }
       } else {
         return res.json({ success: false });
       }
-
-      // await user.updateOne({
-      //   $set: {
-      //     pathAvatar: pathImage,
-      //   },
-      // });
     } catch (error) {
       res
         .status(500)
