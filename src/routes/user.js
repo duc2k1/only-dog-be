@@ -46,18 +46,21 @@ router.post(
         return res
           .status(404)
           .json({ success: false, message: "Not found user" });
-      if (user.version !== version) {
-        return res.json({ success: false });
+      //----------------------------------------
+      if (user.version !== +version) {
+        return res.json({ success: false, message: "Optimistic" });
+      } else {
+        const pathImage = "/images/" + req.imageName;
+        res.status(200).json({ success: true, pathImage });
+        try {
+          user.pathAvatar = pathImage;
+          await user.save();
+        } catch (error) {
+          console.log(error);
+          return res.json({ success: false, message: "Optimistic" });
+        }
       }
       //----------------------------------------
-      const pathImage = "/images/" + req.imageName;
-      res.status(200).json({ success: true, pathImage });
-      try {
-        user.pathAvatar = pathImage;
-        await user.save();
-      } catch (error) {
-        return res.json({ success: false, message: "Optimistic!!!" });
-      }
     } catch (error) {
       res
         .status(500)
