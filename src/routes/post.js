@@ -9,11 +9,11 @@ const router = express.Router();
 //--------------------------------------------------------------
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "src/images/");
+    cb(null, "src/images/"+nanoid()+"."+file.mimetype.split('/')[1]);
   },
   filename: function (req, file, cb) {
     file.originalname = file.originalname.trim().replace(/ /g, "-");
-    cb(null, req.params.userId + file.originalname);
+    cb(null, nanoid()+"."+file.mimetype.split('/')[1]);
   },
 });
 const upload = multer({ storage: storage });
