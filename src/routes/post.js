@@ -1,10 +1,12 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import multer from "multer";
+import serverError from "../errors/serverError.js";
 import { randomId } from "../helpers/commonFunction.js";
 import verifyAccessToken from "../middlewares/verifyAccessToken.js";
 import Post from "../models/Post.js";
 import User from "../models/User.js";
+
 //--------------------------------------------------------------
 const router = express.Router();
 //--------------------------------------------------------------
@@ -51,9 +53,7 @@ router.post(
       await user.updateOne({ $push: { posts: post._id.toString() } });
     } catch (error) {
       console.log("~ error", error);
-      res
-        .status(500)
-        .json({ success: false, message: "Internal server error" });
+      serverError(res);
     }
   }
 );
@@ -105,7 +105,7 @@ router.put("/like", verifyAccessToken, async (req, res) => {
     }
   } catch (err) {
     console.log("~ err", err);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    serverError(res);
   }
 });
 //--------------------------------------------------------------
@@ -156,7 +156,7 @@ router.put("/dislike", verifyAccessToken, async (req, res) => {
     }
   } catch (err) {
     console.log("~ err", err);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    serverError(res);
   }
 });
 //--------------------------------------------------------------
@@ -167,7 +167,7 @@ router.get("/get_all", async (req, res) => {
     res.status(200).json({ success: true, posts, users });
   } catch (error) {
     console.log("~ error", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    serverError(res);
   }
 });
 //--------------------------------------------------------------
@@ -182,7 +182,7 @@ router.post("/upload", upload.single("avatar"), async (req, res) => {
     res.send(image);
   } catch (error) {
     console.log("~ error", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    serverError(res);
   }
 });
 //--------------------------------------------------------------

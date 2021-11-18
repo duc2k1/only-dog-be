@@ -1,11 +1,13 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import multer from "multer";
+import serverError from "../errors/serverError.js";
 import { randomId } from "../helpers/commonFunction.js";
 import verifyAccessToken from "../middlewares/verifyAccessToken.js";
 import Post from "../models/Post.js";
 import User from "../models/User.js";
 import validateUserName from "../validate/validateUserName.js";
+
 const router = express.Router();
 //--------------------------------------------------------------
 const storage = multer.diskStorage({
@@ -63,9 +65,7 @@ router.post(
       //----------------------------------------
     } catch (error) {
       console.log("~ error", error);
-      res
-        .status(500)
-        .json({ success: false, message: "Internal server error" });
+      serverError(res);
     }
   }
 );
@@ -91,8 +91,9 @@ router.get("/get_dashboard_user_id/:userId", async (req, res) => {
     );
     const users = await User.find();
     res.status(200).json({ success: true, posts: allPostInDb, users });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+  } catch (err) {
+    console.log("~ err", err);
+    serverError(res);
   }
 });
 //--------------------------------------------------------------
@@ -138,7 +139,8 @@ router.put("/follow_and_unfollow", verifyAccessToken, async (req, res) => {
       await userBeFollow.updateOne({ $pull: { followers: userIdFollow } }); //other user
     }
   } catch (err) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.log("~ err", err);
+    serverError(res);
   }
 });
 //--------------------------------------------------------------
@@ -163,7 +165,7 @@ router.get("/find_by_name/:userName", async (req, res) => {
     res.json({ success: true, users });
   } catch (error) {
     console.log("~ error", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    serverError(res);
   }
 });
 //--------------------------------------------------------------
@@ -185,7 +187,7 @@ router.get("/find_by_id/:userId", async (req, res) => {
     res.json({ success: true, user });
   } catch (error) {
     console.log("~ error", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    serverError(res);
   }
 });
 //--------------------------------------------------------------
@@ -195,7 +197,7 @@ router.get("/get_all", async (req, res) => {
     res.json({ success: true, users });
   } catch (error) {
     console.log("~ error", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: "eee" });
   }
 });
 //--------------------------------------------------------------
