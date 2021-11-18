@@ -1,4 +1,3 @@
-import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
@@ -27,8 +26,8 @@ const connectDB = async () => {
 connectDB();
 //--------------------------------------------------------------
 // https://onlydog.social
-app.use(express.json());
-app.use(cors());
+// app.use(express.json());
+// app.use(cors());
 app.use("/auth", authRouter);
 app.use("/posts", postRouter);
 app.use("/users", userRouter);
