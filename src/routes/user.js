@@ -160,7 +160,6 @@ router.get("/find_by_name/:userName", async (req, res) => {
       userName: { $regex: userName, $options: "i" },
     }).select("-password");
     res.json({ success: true, users });
-    console.log(users);
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
   }

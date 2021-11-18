@@ -161,8 +161,9 @@ router.put("/dislike", verifyAccessToken, async (req, res) => {
 router.get("/get_all", async (req, res) => {
   try {
     const posts = await Post.find();
-    const users = await User.find();
-    res.status(200).json({ success: true, posts, users });
+    // const users = await User.find();
+    // res.status(200).json({ success: true, posts, users });
+    res.status(200).json({ success: true, posts });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
@@ -176,4 +177,71 @@ router.post("/upload", upload.single("avatar"), async (req, res) => {
   res.send(image);
 });
 //--------------------------------------------------------------
+router.post("/add_comment/:postId", async (req, res) => {
+  try {
+    //--validate all
+    const { postId } = req.params;
+    const { userId, content } = req.body;
+    if (!userId || !postId) {
+      return res.status(404).json({
+        success: false,
+        message: "Not found postId or/and userId",
+      });
+    }
+    if (!content) {
+      return res.status(404).json({
+        success: false,
+        message: "Content has been empty",
+      });
+    }
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Not found post",
+      });
+    } else {
+      await post.updateOne({
+        $push: { comments: { content: content, by: userId } },
+      });
+      return res.status(200).json({
+        success: true,
+        post,
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
+//--------------------------------------------------------------
+router.get("/get_all_commentpost/:postId",async(req, res)=>{
+  try {
+    //--validate all
+    const { postId } = req.params;
+    if ( !postId) {
+      return res.status(404).json({
+        success: false,
+        message: "Not found postId or/and userId",
+      });
+    }
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Not found post",
+      });
+    } else {
+      return res.status(200).json({
+        success: true,
+        post,
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
+
+
+//--------------------------------------------------------------
+
 export default router;
