@@ -2,12 +2,12 @@
   "name": "only-dog-be",
   "version": "0.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "src/app",
   "type": "module",
   "scripts": {
     "preinstall": "npx only-allow yarn",
-    "dev": "nodemon app",
-    "product": "node app"
+    "dev": "nodemon src/app",
+    "product": "node src/app"
   },
   "author": "",
   "license": "ISC",

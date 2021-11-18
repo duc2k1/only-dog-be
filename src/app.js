@@ -1,12 +1,11 @@
+import cors from "cors";
+import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
-import cors from "cors";
-import helmet from "helmet";
-import dotenv from "dotenv";
-import authRouter from "./src/routes/auth.js";
-import postRouter from "./src/routes/post.js";
-import userRouter from "./src/routes/user.js";
 import path from "path";
+import authRouter from "./routes/auth.js";
+import postRouter from "./routes/post.js";
+import userRouter from "./routes/user.js";
 //--------------------------------------------------------------
 const app = express();
 const PORT = process.env.PORT || 5500;
@@ -28,7 +27,6 @@ const connectDB = async () => {
 connectDB();
 //--------------------------------------------------------------
 // https://onlydog.social
-app.use(helmet());
 app.use(express.json());
 app.use(cors());
 app.use("/auth", authRouter);
