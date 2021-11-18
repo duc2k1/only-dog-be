@@ -1,21 +1,14 @@
-import express from "express";
 import bcrypt from "bcrypt";
+import express from "express";
 import jwt from "jsonwebtoken";
-import redis from "redis";
-import dotenv from "dotenv";
+import { redisClient } from "../connects/connectToRedis.js";
 import User from "../models/User.js";
-import validateUserName from "../validate/validateUserName.js";
 import validateEmail from "../validate/validateEmail.js";
 import validatePassword from "../validate/validatePassword.js";
+import validateUserName from "../validate/validateUserName.js";
 //--------------------------------------------------------------
 const saltRounds = 10;
 const router = express.Router();
-dotenv.config();
-const redisClient = redis.createClient({
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT,
-  password: process.env.REDIS_PASSWORD,
-});
 let refreshTokens = [];
 const key = "refreshToken";
 //--------------------------------------------------------------
@@ -31,6 +24,7 @@ router.delete("/remove_all_refresh_token", (req, res) => {
       }
     });
   } catch (err) {
+    console.log("~ err", err);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
@@ -52,6 +46,7 @@ router.delete("/remove_refresh_token", (req, res) => {
       }
     });
   } catch (err) {
+    console.log("~ err", err);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
@@ -78,6 +73,7 @@ router.put("/refresh_access_token", (req, res) => {
       res.status(200).json({ success: true, accessToken });
     });
   } catch (error) {
+    console.log("~ error", error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
@@ -127,6 +123,7 @@ router.post("/register", async (req, res) => {
     });
     await newUser.save();
   } catch (error) {
+    console.log("~ error", error);
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });
@@ -178,6 +175,7 @@ router.post("/login", async (req, res) => {
       }
     });
   } catch (error) {
+    console.log("~ error", error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });

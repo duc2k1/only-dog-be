@@ -1,10 +1,10 @@
 import express from "express";
+import jwt from "jsonwebtoken";
 import multer from "multer";
+import { randomId } from "../helpers/commonFunction.js";
 import verifyAccessToken from "../middlewares/verifyAccessToken.js";
 import Post from "../models/Post.js";
 import User from "../models/User.js";
-import jwt from "jsonwebtoken";
-import { nanoid } from "nanoid";
 //--------------------------------------------------------------
 const router = express.Router();
 //--------------------------------------------------------------
@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
     cb(null, "src/images/");
   },
   filename: function (req, file, cb) {
-    const imageName = nanoid() + "." + file.mimetype.split("/")[1];
+    const imageName = randomId() + "." + file.mimetype.split("/")[1];
     req.imageName = imageName;
     cb(null, imageName);
   },
@@ -104,6 +104,7 @@ router.put("/like", verifyAccessToken, async (req, res) => {
       await post.updateOne({ $pull: { likes: userId } });
     }
   } catch (err) {
+    console.log("~ err", err);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 });
@@ -154,6 +155,7 @@ router.put("/dislike", verifyAccessToken, async (req, res) => {
       await post.updateOne({ $pull: { dislikes: userId } });
     }
   } catch (err) {
+    console.log("~ err", err);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 });
@@ -164,16 +166,24 @@ router.get("/get_all", async (req, res) => {
     const users = await User.find();
     res.status(200).json({ success: true, posts, users });
   } catch (error) {
+    console.log("~ error", error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
 //--------------------------------------------------------------
 router.post("/upload", upload.single("avatar"), async (req, res) => {
-  const image = req.file;
-  if (!image) {
-    return res.status(404).json({ success: false, message: "Not found image" });
+  try {
+    const image = req.file;
+    if (!image) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Not found image" });
+    }
+    res.send(image);
+  } catch (error) {
+    console.log("~ error", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
-  res.send(image);
 });
 //--------------------------------------------------------------
 export default router;

@@ -1,19 +1,19 @@
 import express from "express";
+import jwt from "jsonwebtoken";
 import multer from "multer";
+import { randomId } from "../helpers/commonFunction.js";
 import verifyAccessToken from "../middlewares/verifyAccessToken.js";
 import Post from "../models/Post.js";
-const router = express.Router();
 import User from "../models/User.js";
-import jwt from "jsonwebtoken";
 import validateUserName from "../validate/validateUserName.js";
-import { nanoid } from "nanoid";
+const router = express.Router();
 //--------------------------------------------------------------
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "src/images/");
   },
   filename: function (req, file, cb) {
-    const imageName = nanoid() + "." + file.mimetype.split("/")[1];
+    const imageName = randomId() + "." + file.mimetype.split("/")[1];
     req.imageName = imageName;
     cb(null, imageName);
   },
@@ -62,6 +62,7 @@ router.post(
       }
       //----------------------------------------
     } catch (error) {
+      console.log("~ error", error);
       res
         .status(500)
         .json({ success: false, message: "Internal server error" });
@@ -160,8 +161,8 @@ router.get("/find_by_name/:userName", async (req, res) => {
       userName: { $regex: userName, $options: "i" },
     }).select("-password");
     res.json({ success: true, users });
-    console.log(users);
   } catch (error) {
+    console.log("~ error", error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
@@ -183,6 +184,7 @@ router.get("/find_by_id/:userId", async (req, res) => {
     user.posts = await Post.find().where("_id").in(user.posts);
     res.json({ success: true, user });
   } catch (error) {
+    console.log("~ error", error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
@@ -192,6 +194,7 @@ router.get("/get_all", async (req, res) => {
     const users = await User.find().select("-password");
     res.json({ success: true, users });
   } catch (error) {
+    console.log("~ error", error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
