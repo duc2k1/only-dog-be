@@ -47,7 +47,7 @@ router.delete("/remove_refresh_token", (req, res) => {
         refreshTokens = JSON.parse(data).filter(
           (refToken) => refToken !== refreshToken
         );
-        console.log("~ refreshTokens", refreshTokens);
+        // console.log("~ refreshTokens", refreshTokens);
         redisClient.set(key, JSON.stringify(refreshTokens));
       }
     });
