@@ -187,6 +187,40 @@ router.get("/find_by_id/:userId", async (req, res) => {
   }
 });
 //--------------------------------------------------------------
+router.delete("/delete/:userId", verifyAccessToken, async (req, res) => {
+  try {
+    //--validate all
+    const { userId } = req.params;
+    if (!userId) {
+      return res.status(403).json({
+        success: false,
+        message: "Not found userID",
+      });
+    }
+    const accessToken = req.headers.authorization.split(" ")[1];
+    if (userId === jwt.decode(accessToken).userId) {
+      const user = await User.findById(userId).select("-password");
+      console.log(user);
+      if (!user) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Not found user" });
+      } else {
+        await User.findByIdAndDelete(userId);
+        return res
+          .status(200)
+          .json({ success: true, message: "Account have been deleted" });
+      }
+    } else {
+      return res
+        .status(403)
+        .json({ success: false, message: "You can delete your account" });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+//--------------------------------------------------------------
 router.get("/get_all", async (req, res) => {
   try {
     const users = await User.find().select("-password");
