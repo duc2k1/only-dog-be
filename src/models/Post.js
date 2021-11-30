@@ -32,7 +32,7 @@ const PostSchema = new Schema({
       type: Date,
       default: Date.now
     }
-  }],
+  },{ optimisticConcurrency: true, versionKey: 'version' }],
   createdAt: {
     type: Date,
     default: Date.now,
