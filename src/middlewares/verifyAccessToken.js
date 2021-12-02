@@ -4,6 +4,9 @@ import dotenv from "dotenv";
 dotenv.config();
 //--------------------------------------------------------------
 export default function verifyAccessToken(req, res, next) {
+  if(!req.headers.authorization){
+    return  res.status(400).json({ success: false, message: "Token is empty" });
+  }
   const accessToken = req.headers.authorization.split(" ")[1];
   if (!accessToken)
     return res
