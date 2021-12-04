@@ -15,14 +15,14 @@ const __dirname = path.resolve();
 //--------------------------------------------------------------
 const connectDB = async () => {
   try {
-    // await mongoose.connect(process.env.DB_URL, {
-    //   useNewUrlParser: true,
-    //   useUnifiedTopology: true,
-    // });
-    await mongoose.connect("mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false", {
+    await mongoose.connect(process.env.DB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
+    // await mongoose.connect("mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false", {
+    //   useNewUrlParser: true,
+    //   useUnifiedTopology: true,
+    // });
     console.log("MongoDB connected");
   } catch (error) {
     console.log(error.message);
