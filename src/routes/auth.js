@@ -72,7 +72,7 @@ router.put("/refresh_access_token", (req, res) => {
         { userName: data.userName },
         process.env.ACCESS_TOKEN_SECRET
         // {
-        //   expiresIn: "30s",
+        //   expiresIn: "3000s",
         // }
       );
       res.status(200).json({ success: true, accessToken });
@@ -160,7 +160,7 @@ router.post("/login", async (req, res) => {
     const refreshToken = jwt.sign(
       { userId: user._id },
       process.env.REFRESH_TOKEN_SECRET
-      // { expiresIn: "7d" }
+      // { expiresIn: "70000s" }
     );
     refreshTokens.push(refreshToken);
     res.json({

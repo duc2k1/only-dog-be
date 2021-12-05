@@ -195,7 +195,7 @@ router.post("/comment/add/:postId", verifyAccessToken, async (req, res) => {
       });
     }
     const accessToken = req.headers.authorization.split(" ")[1];
-    if(userId === jwt.decode(accessToken).userId){
+    if (userId === jwt.decode(accessToken).userId) {
       const post = await Post.findById(postId);
       if (!post) {
         return res.status(404).json({
@@ -206,18 +206,18 @@ router.post("/comment/add/:postId", verifyAccessToken, async (req, res) => {
         await post.updateOne({
           $push: { comments: { content: content, by: userId } },
         });
+        const newPost = await Post.findById(postId);
         return res.status(200).json({
           success: true,
-          post,
+          post: newPost,
         });
       }
-    }else{
+    } else {
       return res.status(403).json({
         success: false,
         message: "Forbidden",
       });
     }
-    
   } catch (err) {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
@@ -268,7 +268,8 @@ router.delete(
       }
       const post = await Post.findById(postId);
       if (post) {
-        if (post.comments.some((value) => value.by.valueOf() === userId)) {
+        const accessToken = req.headers.authorization.split(" ")[1];
+        if (userId === jwt.decode(accessToken).userId) {
           if (
             post.comments.find((value) => value._id.valueOf() === commentId)
           ) {
