@@ -270,33 +270,35 @@ router.delete(
       if (post) {
         const accessToken = req.headers.authorization.split(" ")[1];
         if (userId === jwt.decode(accessToken).userId) {
-          if (
-            post.comments.find((value) => value._id.valueOf() === commentId)
-          ) {
-            await Post.findOneAndUpdate(
-              { _id: postId },
-              {
-                $pull: {
-                  comments: { _id: commentId },
+          if (post.comments.some((value) => value.by.valueOf() === userId)) {
+            if (
+              post.comments.find((value) => value._id.valueOf() === commentId)
+            ) {
+              await Post.findOneAndUpdate(
+                { _id: postId },
+                {
+                  $pull: {
+                    comments: { _id: commentId },
+                  },
                 },
-              },
-              { safe: true }
-            );
-            return res.status(200).json({
-              success: true,
-              message: "Comment have been deleted",
-            });
+                { safe: true }
+              );
+              return res.status(200).json({
+                success: true,
+                message: "Comment have been deleted",
+              });
+            } else {
+              return res.status(403).json({
+                success: false,
+                message: "Comment not found",
+              });
+            }
           } else {
-            return res.status(403).json({
+            return res.status(404).json({
               success: false,
-              message: "Comment not found",
+              message: "You can delete your comment!",
             });
           }
-        } else {
-          return res.status(404).json({
-            success: false,
-            message: "You can delete your comment!",
-          });
         }
       } else {
         res.status(404).json({
