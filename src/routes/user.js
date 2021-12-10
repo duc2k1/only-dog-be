@@ -141,26 +141,18 @@ router.put("/follow_and_unfollow", verifyAccessToken, async (req, res) => {
 //--------------------------------------------------------------
 //use for find user by name
 router.get("/find_by_name/:userName", async (req, res) => {
-  try {
-    const { userName } = req.params; //get from body
-    if (!userName)
-      return res
-        .status(404)
-        .json({ success: false, message: "Not found user" });
-    //----------------------------------
-    if (!validateUserName(userName))
-      return res.status(400).json({
-        success: false,
-        users: [],
-      });
-    //----------------------------------
-    const users = await User.find({
-      userName: { $regex: userName, $options: "i" },
-    }).select("-password");
-    res.json({ success: true, users });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
-  }
+  const { userName } = req.params;
+  //----------------------------------
+  if (!validateUserName(userName))
+    return res.status(400).json({
+      success: false,
+      users: [],
+    });
+  //----------------------------------
+  const users = await User.find({
+    userName: { $regex: userName, $options: "i" },
+  }).select("-password");
+  return res.status(200).json({ success: true, users });
 });
 //--------------------------------------------------------------
 //use for profile user
