@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
 import express from "express";
 import jwt from "jsonwebtoken";
 import { redisClient } from "../connects/connectToRedis.js";
@@ -8,6 +9,7 @@ import validateEmail from "../validate/validateEmail.js";
 import validatePassword from "../validate/validatePassword.js";
 import validateUserName from "../validate/validateUserName.js";
 //--------------------------------------------------------------
+dotenv.config();
 const saltRounds = 10;
 const router = express.Router();
 let refreshTokens = [];
@@ -100,7 +102,7 @@ router.post("/register", async (req, res) => {
     const newUser = new User({ userName, email, password: hashedPassword });
     const accessToken = jwt.sign(
       { userId: newUser._id },
-      process.env.ACCESS_TOKEN_SECRET.anchor,
+      process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "5m" }
     );
     const refreshToken = jwt.sign(
@@ -123,8 +125,8 @@ router.post("/register", async (req, res) => {
       }
     });
     await newUser.save();
-  } catch (error) {
-    console.log("~ error", error);
+  } catch (err) {
+    console.log("~ err", err);
     serverError(res);
   }
 });
@@ -173,8 +175,8 @@ router.post("/login", async (req, res) => {
         redisClient.set(key, JSON.stringify(refreshTokens));
       }
     });
-  } catch (error) {
-    console.log("~ error", error);
+  } catch (err) {
+    console.log("~ err", err);
     serverError(res);
   }
 });

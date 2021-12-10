@@ -1,3 +1,4 @@
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import path from "path";
@@ -17,7 +18,7 @@ redisStatus();
 //--------------------------------------------------------------
 // https://onlydog.social
 app.use(express.json());
-// app.use(cors());
+app.use(cors());
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
@@ -31,4 +32,4 @@ app.get("*", (req, res) => {
   res.status(404).send("<h1>404</h1>");
 });
 //--------------------------------------------------------------
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Server started on port ${PORT}`));

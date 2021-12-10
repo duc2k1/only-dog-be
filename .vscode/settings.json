@@ -1,6 +1,4 @@
 {
-  "appService.defaultWebAppToDeploy": "/subscriptions/1f687f2f-1e23-4926-a111-651274c063c3/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/only-dog-be",
-  "appService.deploySubpath": ".",
   "editor.codeActionsOnSave": {
     "source.organizeImports": true
   },

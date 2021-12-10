@@ -7,9 +7,8 @@ import verifyAccessToken from "../middlewares/verifyAccessToken.js";
 import Post from "../models/Post.js";
 import User from "../models/User.js";
 import validateUserName from "../validate/validateUserName.js";
-
-const router = express.Router();
 //--------------------------------------------------------------
+const router = express.Router();
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "src/images/");
@@ -57,14 +56,14 @@ router.post(
         try {
           user.pathAvatar = pathImage;
           await user.save();
-        } catch (error) {
-          console.log(error);
+        } catch (err) {
+          console.log(err);
           return res.json({ success: false, message: "Optimistic" });
         }
       }
       //----------------------------------------
-    } catch (error) {
-      console.log("~ error", error);
+    } catch (err) {
+      console.log("~ err", err);
       serverError(res);
     }
   }
@@ -163,8 +162,8 @@ router.get("/find_by_name/:userName", async (req, res) => {
       userName: { $regex: userName, $options: "i" },
     }).select("-password");
     res.json({ success: true, users });
-  } catch (error) {
-    console.log("~ error", error);
+  } catch (err) {
+    console.log("~ err", err);
     serverError(res);
   }
 });
@@ -185,8 +184,8 @@ router.get("/find_by_id/:userId", async (req, res) => {
     //-------------------------------------
     user.posts = await Post.find().where("_id").in(user.posts);
     res.json({ success: true, user });
-  } catch (error) {
-    console.log("~ error", error);
+  } catch (err) {
+    console.log("~ err", err);
     serverError(res);
   }
 });
@@ -195,8 +194,8 @@ router.get("/get_all", async (req, res) => {
   try {
     const users = await User.find().select("-password");
     res.json({ success: true, users });
-  } catch (error) {
-    console.log("~ error", error);
+  } catch (err) {
+    console.log("~ err", err);
     res.status(500).json({ success: false, message: "eee" });
   }
 });

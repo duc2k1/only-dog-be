@@ -6,7 +6,6 @@ import { randomId } from "../helpers/commonFunction.js";
 import verifyAccessToken from "../middlewares/verifyAccessToken.js";
 import Post from "../models/Post.js";
 import User from "../models/User.js";
-
 //--------------------------------------------------------------
 const router = express.Router();
 //--------------------------------------------------------------
@@ -51,8 +50,8 @@ router.post(
       }).save();
       res.status(200).json({ success: true, pathImage });
       await user.updateOne({ $push: { posts: post._id.toString() } });
-    } catch (error) {
-      console.log("~ error", error);
+    } catch (err) {
+      console.log("~ err", err);
       serverError(res);
     }
   }
@@ -165,8 +164,8 @@ router.get("/get_all", async (req, res) => {
     const posts = await Post.find();
     const users = await User.find();
     res.status(200).json({ success: true, posts, users });
-  } catch (error) {
-    console.log("~ error", error);
+  } catch (err) {
+    console.log("~ err", err);
     serverError(res);
   }
 });
@@ -180,8 +179,8 @@ router.post("/upload", upload.single("avatar"), async (req, res) => {
         .json({ success: false, message: "Not found image" });
     }
     res.send(image);
-  } catch (error) {
-    console.log("~ error", error);
+  } catch (err) {
+    console.log("~ err", err);
     serverError(res);
   }
 });
