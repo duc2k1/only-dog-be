@@ -75,10 +75,12 @@ router.put("/refresh_access_token", (req, res) => {
         //   expiresIn: "3000s",
         // }
       );
-      res.status(200).json({ success: true, accessToken });
+      return res.status(200).json({ success: true, accessToken });
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 });
 router.post("/register", async (req, res) => {

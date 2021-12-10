@@ -95,8 +95,6 @@ router.get("/get_dashboard_user_id/:userId", async (req, res) => {
   }
 });
 //--------------------------------------------------------------
-//user_id: user current (userId) => send from params
-//user_id_follow: user has followed by another one
 router.put("/follow_and_unfollow", verifyAccessToken, async (req, res) => {
   try {
     //--validate all
@@ -168,21 +166,20 @@ router.get("/find_by_name/:userName", async (req, res) => {
 //use for profile user
 router.get("/find_by_id/:userId", async (req, res) => {
   try {
-    const { userId } = req.params; //get from body
-    if (!userId)
-      return res
-        .status(404)
-        .json({ success: false, message: "Not found userId" });
+    const { userId } = req.params;
+    // if (!userId)
+    //   return res
+    //     .status(404)
+    //     .json({ success: false, message: "Not found user" });
     const user = await User.findById(userId).select("-password");
-    if (!user)
-      return res
-        .status(404)
-        .json({ success: false, message: "Not found user" });
     //-------------------------------------
     user.posts = await Post.find().where("_id").in(user.posts);
-    res.json({ success: true, user });
+    return res.status(200).json({ success: true, user });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    return res.status(500).json({
+      success: false,
+      message: "Not found user  and/or internal server error",
+    });
   }
 });
 //--------------------------------------------------------------
@@ -223,9 +220,11 @@ router.delete("/delete/:userId", verifyAccessToken, async (req, res) => {
 router.get("/get_all", async (req, res) => {
   try {
     const users = await User.find().select("-password");
-    res.json({ success: true, users });
+    return res.status(200).json({ success: true, users });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 });
 //--------------------------------------------------------------

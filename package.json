@@ -5,9 +5,9 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "preinstall": "npx only-allow yarn",
-    "dev": "nodemon app",
-    "product": "node app"
+    "dev": "nodemon serverconnect",
+    "product": "node serverconnect",
+    "test": " set NODE_OPTIONS=--experimental-vm-modules && jest --coverage "
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +25,8 @@
     "redis": "^3.1.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.14"
+    "jest": "^27.4.3",
+    "nodemon": "^2.0.14",
+    "supertest": "^6.1.6"
   }
 }
