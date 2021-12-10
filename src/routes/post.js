@@ -185,4 +185,138 @@ router.post("/upload", upload.single("avatar"), async (req, res) => {
   }
 });
 //--------------------------------------------------------------
+router.post("/comment/add/:postId", verifyAccessToken, async (req, res) => {
+  try {
+    //--validate all
+    const { postId } = req.params;
+    const { userId, content } = req.body;
+    if (!userId || !postId) {
+      return res.status(404).json({
+        success: false,
+        message: "Not found postId or/and userId",
+      });
+    }
+    if (!content) {
+      return res.status(404).json({
+        success: false,
+        message: "Content has been empty",
+      });
+    }
+    const accessToken = req.headers.authorization.split(" ")[1];
+    if (userId === jwt.decode(accessToken).userId) {
+      const post = await Post.findById(postId);
+      if (!post) {
+        return res.status(404).json({
+          success: false,
+          message: "Not found post",
+        });
+      } else {
+        await post.updateOne({
+          $push: { comments: { content: content, by: userId } },
+        });
+        return res.status(200).json({
+          success: true,
+          post,
+        });
+      }
+    } else {
+      return res.status(403).json({
+        success: false,
+        message: "Forbidden",
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
+//--------------------------------------------------------------
+router.get("/get_all_commentpost/:postId", async (req, res) => {
+  try {
+    //--validate all
+    const { postId } = req.params;
+    if (!postId) {
+      return res.status(404).json({
+        success: false,
+        message: "Not found postId or/and userId",
+      });
+    }
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Not found post",
+      });
+    } else {
+      return res.status(200).json({
+        success: true,
+        post,
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
+
+//--------------------------------------------------------------
+
+router.delete(
+  "/comment/delete/:postId",
+  verifyAccessToken,
+  async (req, res) => {
+    try {
+      //--validate all
+      const { postId } = req.params;
+      const { userId, commentId } = req.body;
+      if (!userId || !postId || !commentId) {
+        return res.status(404).json({
+          success: false,
+          message: "Not found postId or/and userId or/and commentId",
+        });
+      }
+      const post = await Post.findById(postId);
+      if (post) {
+        if (post.comments.some((value) => value.by.valueOf() === userId)) {
+          if (
+            post.comments.find((value) => value._id.valueOf() === commentId)
+          ) {
+            await Post.findOneAndUpdate(
+              { _id: postId },
+              {
+                $pull: {
+                  comments: { _id: commentId },
+                },
+              },
+              { safe: true }
+            );
+            return res.status(200).json({
+              success: true,
+              message: "Comment have been deleted",
+            });
+          } else {
+            return res.status(403).json({
+              success: false,
+              message: "Comment not found",
+            });
+          }
+        } else {
+          return res.status(404).json({
+            success: false,
+            message: "You can delete your comment!",
+          });
+        }
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "The post not found!",
+        });
+      }
+    } catch (err) {
+      console.log(err.message);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal Server Error" });
+    }
+  }
+);
+//--------------------------------------------------------------
 export default router;

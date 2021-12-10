@@ -20,10 +20,23 @@ const PostSchema = new Schema({
     type: Array,
     default: [],
   },
+  comments : [{
+    content :{
+      type: String
+    },
+    by:{
+      type: Schema.Types.ObjectId,
+      ref: 'users'
+    },
+    date:{
+      type: Date,
+      default: Date.now
+    }
+  },{ optimisticConcurrency: true, versionKey: 'version' }],
   createdAt: {
     type: Date,
     default: Date.now,
   },
-});
+},{ optimisticConcurrency: true, versionKey: 'version' });
 //--------------------------------------------------------------
 export default mongoose.model("posts", PostSchema);
