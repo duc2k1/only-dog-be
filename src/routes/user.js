@@ -74,10 +74,6 @@ router.get("/get_dashboard_user_id/:userId", async (req, res) => {
   try {
     //-------------------------------------------------------------
     const { userId } = req.params;
-    if (!userId)
-      return res
-        .status(404)
-        .json({ success: false, message: "Not found userId" });
     const user = await User.findById(userId).select("-password");
     if (!user)
       return res
