@@ -26,7 +26,7 @@ app.use("/default_avatar", express.static(__dirname + "/src"));
 
 //--------------------------------------------------------------
 app.get("*", (req, res) => {
-  res.status(404).send("<h1>404</h1>");
+  return res.status(404).json({ message: "Page not found" });
 });
 //--------------------------------------------------------------
 export default app;
