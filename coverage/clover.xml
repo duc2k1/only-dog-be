@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1639191863699" clover="3.2.0">
-  <project timestamp="1639191863699" name="All files">
+<coverage generated="1639272791479" clover="3.2.0">
+  <project timestamp="1639272791479" name="All files">
     <metrics statements="336" coveredstatements="74" conditionals="134" coveredconditionals="3" methods="38" coveredmethods="7" elements="508" coveredelements="84" complexity="0" loc="336" ncloc="336" packages="5" files="10" classes="10"/>
     <package name="only-dog-be">
       <metrics statements="12" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-      <file name="app.js" path="D:\TDC\HK5\CD Web 2\only-dog-be\app.js">
+      <file name="app.js" path="D:\HOC KY 5\Chuyen De Phat Trien Web 1\project\only-dog-be\app.js">
         <metrics statements="12" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="10" count="4" type="stmt"/>
         <line num="12" count="4" type="stmt"/>
@@ -22,7 +22,7 @@
     </package>
     <package name="only-dog-be.src.middlewares">
       <metrics statements="11" coveredstatements="1" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
-      <file name="verifyAccessToken.js" path="D:\TDC\HK5\CD Web 2\only-dog-be\src\middlewares\verifyAccessToken.js">
+      <file name="verifyAccessToken.js" path="D:\HOC KY 5\Chuyen De Phat Trien Web 1\project\only-dog-be\src\middlewares\verifyAccessToken.js">
         <metrics statements="11" coveredstatements="1" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="4" count="4" type="stmt"/>
         <line num="7" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -39,12 +39,12 @@
     </package>
     <package name="only-dog-be.src.models">
       <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="Post.js" path="D:\TDC\HK5\CD Web 2\only-dog-be\src\models\Post.js">
+      <file name="Post.js" path="D:\HOC KY 5\Chuyen De Phat Trien Web 1\project\only-dog-be\src\models\Post.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="3" count="4" type="stmt"/>
         <line num="5" count="4" type="stmt"/>
       </file>
-      <file name="User.js" path="D:\TDC\HK5\CD Web 2\only-dog-be\src\models\User.js">
+      <file name="User.js" path="D:\HOC KY 5\Chuyen De Phat Trien Web 1\project\only-dog-be\src\models\User.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="3" count="4" type="stmt"/>
         <line num="5" count="4" type="stmt"/>
@@ -52,7 +52,7 @@
     </package>
     <package name="only-dog-be.src.routes">
       <metrics statements="303" coveredstatements="55" conditionals="130" coveredconditionals="3" methods="33" coveredmethods="5"/>
-      <file name="auth.js" path="D:\TDC\HK5\CD Web 2\only-dog-be\src\routes\auth.js">
+      <file name="auth.js" path="D:\HOC KY 5\Chuyen De Phat Trien Web 1\project\only-dog-be\src\routes\auth.js">
         <metrics statements="83" coveredstatements="11" conditionals="37" coveredconditionals="0" methods="11" coveredmethods="0"/>
         <line num="11" count="4" type="stmt"/>
         <line num="12" count="4" type="stmt"/>
@@ -138,7 +138,7 @@
         <line num="179" count="0" type="stmt"/>
         <line num="183" count="0" type="stmt"/>
       </file>
-      <file name="post.js" path="D:\TDC\HK5\CD Web 2\only-dog-be\src\routes\post.js">
+      <file name="post.js" path="D:\HOC KY 5\Chuyen De Phat Trien Web 1\project\only-dog-be\src\routes\post.js">
         <metrics statements="124" coveredstatements="11" conditionals="59" coveredconditionals="0" methods="12" coveredmethods="0"/>
         <line num="9" count="4" type="stmt"/>
         <line num="11" count="4" type="stmt"/>
@@ -265,7 +265,7 @@
         <line num="310" count="0" type="stmt"/>
         <line num="311" count="0" type="stmt"/>
       </file>
-      <file name="user.js" path="D:\TDC\HK5\CD Web 2\only-dog-be\src\routes\user.js">
+      <file name="user.js" path="D:\HOC KY 5\Chuyen De Phat Trien Web 1\project\only-dog-be\src\routes\user.js">
         <metrics statements="96" coveredstatements="33" conditionals="34" coveredconditionals="3" methods="10" coveredmethods="5"/>
         <line num="5" count="4" type="stmt"/>
         <line num="11" count="4" type="stmt"/>
@@ -367,17 +367,17 @@
     </package>
     <package name="only-dog-be.src.validate">
       <metrics statements="6" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="1"/>
-      <file name="validateEmail.js" path="D:\TDC\HK5\CD Web 2\only-dog-be\src\validate\validateEmail.js">
+      <file name="validateEmail.js" path="D:\HOC KY 5\Chuyen De Phat Trien Web 1\project\only-dog-be\src\validate\validateEmail.js">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="2" count="0" type="stmt"/>
         <line num="3" count="0" type="stmt"/>
       </file>
-      <file name="validatePassword.js" path="D:\TDC\HK5\CD Web 2\only-dog-be\src\validate\validatePassword.js">
+      <file name="validatePassword.js" path="D:\HOC KY 5\Chuyen De Phat Trien Web 1\project\only-dog-be\src\validate\validatePassword.js">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="2" count="0" type="stmt"/>
         <line num="3" count="0" type="stmt"/>
       </file>
-      <file name="validateUserName.js" path="D:\TDC\HK5\CD Web 2\only-dog-be\src\validate\validateUserName.js">
+      <file name="validateUserName.js" path="D:\HOC KY 5\Chuyen De Phat Trien Web 1\project\only-dog-be\src\validate\validateUserName.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="2" count="11" type="stmt"/>
         <line num="3" count="11" type="stmt"/>

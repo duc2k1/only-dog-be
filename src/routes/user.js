@@ -70,7 +70,7 @@ router.post(
 );
 //-------------------------------------------------------------
 //use for dashboard userId
-router.get("/get_dashboard_user_id/:userId", async (req, res) => {
+router.get("/get_dashboard_user_id/:userId", async (req, res) => { 
   try {
     //-------------------------------------------------------------
     const { userId } = req.params;
@@ -205,9 +205,9 @@ router.delete("/delete/:userId", verifyAccessToken, async (req, res) => {
   }
 });
 //--------------------------------------------------------------
-router.get("/get_all", async (req, res) => {
+router.get("/get_all", async (req, res) => { //route return a json has list users
   const users = await User.find().select("-password");
-  return res.status(200).json({ success: true, users });
+  return res.status(200).json({ success: true, users }); 
 });
 //--------------------------------------------------------------
 export default router;
