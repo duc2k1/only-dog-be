@@ -23,6 +23,7 @@ export default function verifyAccessToken(req, res, next) {
     req.userId = decoded.userId;
     next();
   } catch (error) {
+    console.log("~ error", error);
     serverError(res);
   }
 }

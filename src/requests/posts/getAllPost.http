@@ -1,2 +1,2 @@
 ###
-GET http://localhost:5500/posts/get_all
+GET http://localhost:3001/posts/get_all

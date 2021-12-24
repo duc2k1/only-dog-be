@@ -1,12 +1,13 @@
+console.clear();
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import path from "path";
-import connectToMongoDb from "./connects/connectToMongoDb.js";
-import { redisStatus } from "./connects/connectToRedis.js";
-import authRouter from "./routes/auth.js";
-import postRouter from "./routes/post.js";
-import userRouter from "./routes/user.js";
+import connectToMongoDb from "./src/connects/connectToMongoDb.js";
+import { redisStatus } from "./src/connects/connectToRedis.js";
+import authRouter from "./src/routes/auth.js";
+import postRouter from "./src/routes/post.js";
+import userRouter from "./src/routes/user.js";
 //--------------------------------------------------------------
 const app = express();
 const PORT = process.env.PORT;
@@ -20,16 +21,16 @@ redisStatus();
 app.use(express.json());
 app.use(cors());
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  res.send("<h1>Hello</h1>");
 });
 app.use("/auth", authRouter);
 app.use("/posts", postRouter);
 app.use("/users", userRouter);
-app.use("/images", express.static(__dirname + "/src/images"));
-app.use("/default_avatar", express.static(__dirname + "/src"));
+app.use("/images", express.static(__dirname + "/assets/images"));
+app.use("/default_avatar", express.static(__dirname + "/assets"));
 //--------------------------------------------------------------
-app.get("*", (req, res) => {
+app.get("/*", (req, res) => {
   res.status(404).send("<h1>404</h1>");
 });
 //--------------------------------------------------------------
-app.listen(PORT, () => console.log(`✅ Server started on port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Server: http://localhost:${PORT}`));

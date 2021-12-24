@@ -6,9 +6,9 @@ export default async function connectToMongoDb() {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log("MongoDB connected");
+    console.log(`✅ MongoDB: ${process.env.DB_URL}`);
   } catch (error) {
-    console.log(error.message);
+    console.log(`❗️ MongoDB Error: ${error}`);
     process.exit(1);
   }
 }

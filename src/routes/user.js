@@ -11,7 +11,7 @@ import validateUserName from "../validate/validateUserName.js";
 const router = express.Router();
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "src/images/");
+    cb(null, "assets/images/");
   },
   filename: function (req, file, cb) {
     const imageName = randomId() + "." + file.mimetype.split("/")[1];

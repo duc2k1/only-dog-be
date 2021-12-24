@@ -4,6 +4,12 @@
 yarn
 ```
 
+## Create folder images
+
+```
+mkdir assets/images
+```
+
 ## Start server
 
 ```

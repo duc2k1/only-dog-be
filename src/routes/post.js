@@ -11,7 +11,7 @@ const router = express.Router();
 //--------------------------------------------------------------
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "src/images/");
+    cb(null, "assets/images/");
   },
   filename: function (req, file, cb) {
     const imageName = randomId() + "." + file.mimetype.split("/")[1];
@@ -29,6 +29,7 @@ router.post(
     try {
       const { userId } = req.params;
       const file = req.file;
+      //console.log(userId,file);
       if (!userId)
         return res
           .status(404)
@@ -161,8 +162,8 @@ router.put("/dislike", verifyAccessToken, async (req, res) => {
 //--------------------------------------------------------------
 router.get("/get_all", async (req, res) => {
   try {
-    const posts = await Post.find();
-    const users = await User.find();
+    const posts = await Post.find().lean();
+    const users = await User.find().lean();
     res.status(200).json({ success: true, posts, users });
   } catch (err) {
     console.log("~ err", err);
