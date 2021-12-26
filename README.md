@@ -4,12 +4,6 @@
 yarn
 ```
 
-## Create folder images
-
-```
-mkdir assets/images
-```
-
 ## Start server
 
 ```
@@ -21,31 +15,41 @@ yarn dev
 > ## Authentication
 
 ### Login
+
 `POST `
+
 ```
 POST /auth/login
 ```
 
 ### Register
+
 `POST `
+
 ```
-POST/auth/register
+POST /auth/register
 ```
 
 ### Refresh access token
+
 `PUT `
+
 ```
 PUT /auth/refresh_access_token
 ```
 
 ### remove refresh token
+
 `DELETE `
+
 ```
 DELETE /auth/remove_refresh_token
 ```
 
 ### Logout
+
 `DELETE `
+
 ```
 /auth/remove_all_refresh_token
 ```
@@ -57,7 +61,7 @@ DELETE /auth/remove_refresh_token
 `GET `
 
 ```
-/users
+/get_all
 ```
 
 ### Update Avatar User
@@ -107,7 +111,7 @@ DELETE /auth/remove_refresh_token
 `GET`
 
 ```
-/posts
+/get_all
 ```
 
 ### Create new post
@@ -115,7 +119,7 @@ DELETE /auth/remove_refresh_token
 `POST`
 
 ```
-/posts/add/add_image_post
+/posts/add_image_post
 ```
 
 ### Like or Unlike one post
