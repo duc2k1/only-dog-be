@@ -1,3 +1,16 @@
+## Create folder assets/images
+
+```
+mkdir assets/images
+```
+
+## Create .env file then copy .env.example file to .env
+
+```
+touch .env
+cp .env.example .env
+```
+
 ## Install / Update
 
 ```
@@ -16,7 +29,7 @@ yarn dev
 
 ### Login
 
-`POST `
+`POST`
 
 ```
 POST /auth/login
@@ -24,7 +37,7 @@ POST /auth/login
 
 ### Register
 
-`POST `
+`POST`
 
 ```
 POST /auth/register
@@ -32,7 +45,7 @@ POST /auth/register
 
 ### Refresh access token
 
-`PUT `
+`PUT`
 
 ```
 PUT /auth/refresh_access_token
@@ -40,7 +53,7 @@ PUT /auth/refresh_access_token
 
 ### remove refresh token
 
-`DELETE `
+`DELETE`
 
 ```
 DELETE /auth/remove_refresh_token
@@ -48,7 +61,7 @@ DELETE /auth/remove_refresh_token
 
 ### Logout
 
-`DELETE `
+`DELETE`
 
 ```
 /auth/remove_all_refresh_token
@@ -58,7 +71,7 @@ DELETE /auth/remove_refresh_token
 
 ### Get list user
 
-`GET `
+`GET`
 
 ```
 /get_all
@@ -66,7 +79,7 @@ DELETE /auth/remove_refresh_token
 
 ### Update Avatar User
 
-`PUT `
+`PUT`
 
 ```
 /users/change_avatar_user
@@ -74,7 +87,7 @@ DELETE /auth/remove_refresh_token
 
 ### Get userId's dashboard
 
-`GET `
+`GET`
 
 ```
 /posts/get_dashboard_user_id
@@ -82,7 +95,7 @@ DELETE /auth/remove_refresh_token
 
 ### Find user by userName
 
-`GET `
+`GET`
 
 ```
 /users/find_by_name/:userName
@@ -90,7 +103,7 @@ DELETE /auth/remove_refresh_token
 
 ### Get profile user
 
-`GET `
+`GET`
 
 ```
 /users/find_by_id/:userId
